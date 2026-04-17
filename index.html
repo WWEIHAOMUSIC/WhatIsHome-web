@@ -1,2063 +1,2154 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="light" data-lang="zh">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>家里有什么 — 家庭物品管理</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>家里有什么 · What Do I Have at Home</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
   <style>
-    /* ========================================
-       设计系统令牌
-    ======================================== */
-    :root {
-      /* 色彩系统 */
-      --color-primary: #5B8A72;
-      --color-primary-light: #7BA894;
-      --color-primary-dark: #3D6B55;
-      --color-primary-50: #f0f7f3;
-      --color-primary-100: #dceee4;
-
-      --color-secondary: #E8A87C;
-      --color-secondary-light: #F2C4A0;
-      --color-secondary-dark: #C47D4A;
-
-      --color-accent: #C38D9E;
-      --color-accent-light: #E0B4C4;
-
-      --color-bg: #FAFAF8;
-      --color-surface: #FFFFFF;
-      --color-surface-elevated: #FFFFFF;
-      --color-border: #E5E7EB;
-      --color-border-light: #F3F4F6;
-
-      --color-text-primary: #1A1A2E;
-      --color-text-secondary: #4B5563;
-      --color-text-tertiary: #9CA3AF;
-      --color-text-inverse: #FFFFFF;
-
-      --color-success: #10B981;
-      --color-warning: #F59E0B;
-      --color-error: #EF4444;
-      --color-info: #3B82F6;
-
-      /* 阴影系统 */
-      --shadow-xs: 0 1px 2px rgba(0,0,0,0.04);
-      --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
-      --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
-      --shadow-lg: 0 8px 32px rgba(0,0,0,0.1);
-      --shadow-xl: 0 16px 48px rgba(0,0,0,0.12);
-      --shadow-glow: 0 0 0 3px rgba(91,138,114,0.15);
-
-      /* 圆角 */
-      --radius-xs: 4px;
-      --radius-sm: 8px;
-      --radius-md: 12px;
-      --radius-lg: 16px;
-      --radius-xl: 24px;
-      --radius-full: 9999px;
-
-      /* 间距 */
-      --space-1: 4px;
-      --space-2: 8px;
-      --space-3: 12px;
-      --space-4: 16px;
-      --space-5: 20px;
-      --space-6: 24px;
-      --space-8: 32px;
-      --space-10: 40px;
-      --space-12: 48px;
-      --space-16: 64px;
-
-      /* 过渡 */
-      --transition-fast: 150ms ease;
-      --transition-base: 250ms ease;
-      --transition-slow: 400ms ease;
-
-      /* 字体 */
-      --font-sans: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-
-      /* 字号 */
-      --text-xs: 0.75rem;
-      --text-sm: 0.875rem;
-      --text-base: 1rem;
-      --text-lg: 1.125rem;
-      --text-xl: 1.25rem;
-      --text-2xl: 1.5rem;
-      --text-3xl: 1.875rem;
-      --text-4xl: 2.25rem;
-      --text-5xl: 3rem;
-
-      /* 容器 */
-      --container-max: 1200px;
-      --sidebar-width: 280px;
-    }
-
-    /* ========================================
-       重置 & 基础样式
-    ======================================== */
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      font-size: 16px;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: var(--font-sans);
-      background-color: var(--color-bg);
-      color: var(--color-text-primary);
-      line-height: 1.6;
-      min-height: 100vh;
-    }
-
-    button {
-      font-family: inherit;
-      cursor: pointer;
-      border: none;
-      background: none;
-    }
-
-    input, textarea, select {
-      font-family: inherit;
-      font-size: inherit;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    img {
-      max-width: 100%;
-      display: block;
-    }
-
-    ::selection {
-      background: var(--color-primary-100);
-      color: var(--color-primary-dark);
-    }
-
-    /* 自定义滚动条 */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: var(--color-border);
-      border-radius: var(--radius-full);
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--color-text-tertiary);
-    }
-
-    /* ========================================
-       工具类
-    ======================================== */
-    .container {
-      max-width: var(--container-max);
-      margin: 0 auto;
-      padding: 0 var(--space-6);
-    }
-
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      border: 0;
-    }
-
-    /* ========================================
-       头部导航
-    ======================================== */
-    .header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(250, 250, 248, 0.85);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--color-border-light);
-    }
-
-    .header-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 64px;
-      gap: var(--space-4);
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: var(--space-3);
-      font-weight: 600;
-      font-size: var(--text-lg);
-      color: var(--color-text-primary);
-      flex-shrink: 0;
-    }
-
-    .logo-icon {
-      width: 36px;
-      height: 36px;
-      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
-      border-radius: var(--radius-md);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: var(--space-3);
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: var(--space-1);
-    }
-
-    .nav-link {
-      padding: var(--space-2) var(--space-4);
-      border-radius: var(--radius-md);
-      font-size: var(--text-sm);
-      font-weight: 500;
-      color: var(--color-text-secondary);
-      transition: all var(--transition-fast);
-    }
-
-    .nav-link:hover {
-      background: var(--color-primary-50);
-      color: var(--color-primary);
-    }
-
-    .nav-link.active {
-      background: var(--color-primary-100);
-      color: var(--color-primary-dark);
-    }
-
-    /* ========================================
-       按钮系统
-    ======================================== */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: var(--space-2);
-      padding: var(--space-2) var(--space-5);
-      border-radius: var(--radius-md);
-      font-size: var(--text-sm);
-      font-weight: 500;
-      transition: all var(--transition-fast);
-      white-space: nowrap;
-      user-select: none;
-    }
-
-    .btn:focus-visible {
-      outline: none;
-      box-shadow: var(--shadow-glow);
-    }
-
-    .btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      pointer-events: none;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
-      color: var(--color-text-inverse);
-      box-shadow: var(--shadow-sm);
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-1px);
-      box-shadow: var(--shadow-md);
-    }
-
-    .btn-primary:active {
-      transform: translateY(0);
-    }
-
-    .btn-secondary {
-      background: var(--color-surface);
-      color: var(--color-text-primary);
-      border: 1px solid var(--color-border);
-    }
-
-    .btn-secondary:hover {
-      background: var(--color-bg);
-      border-color: var(--color-primary-light);
-    }
-
-    .btn-ghost {
-      color: var(--color-text-secondary);
-    }
-
-    .btn-ghost:hover {
-      background: var(--color-border-light);
-      color: var(--color-text-primary);
-    }
-
-    .btn-lg {
-      padding: var(--space-3) var(--space-6);
-      font-size: var(--text-base);
-      border-radius: var(--radius-lg);
-    }
-
-    .btn-icon {
-      width: 40px;
-      height: 40px;
-      padding: 0;
-      border-radius: var(--radius-md);
-    }
-
-    /* ========================================
-       主内容布局
-    ======================================== */
-    .main-layout {
-      display: flex;
-      min-height: calc(100vh - 64px);
-    }
-
-    .sidebar {
-      width: var(--sidebar-width);
-      flex-shrink: 0;
-      padding: var(--space-6);
-      border-right: 1px solid var(--color-border-light);
-      background: var(--color-surface);
-      position: sticky;
-      top: 64px;
-      height: calc(100vh - 64px);
-      overflow-y: auto;
-    }
-
-    .content {
-      flex: 1;
-      padding: var(--space-8);
-      min-width: 0;
-    }
-
-    /* ========================================
-       搜索区域
-    ======================================== */
-    .hero-search {
-      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 50%, var(--color-secondary-light) 100%);
-      border-radius: var(--radius-xl);
-      padding: var(--space-12) var(--space-8);
-      margin-bottom: var(--space-8);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-search::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      right: -20%;
-      width: 60%;
-      height: 200%;
-      background: radial-gradient(ellipse, rgba(255,255,255,0.15) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .hero-search::after {
-      content: '';
-      position: absolute;
-      bottom: -30%;
-      left: -10%;
-      width: 50%;
-      height: 150%;
-      background: radial-gradient(ellipse, rgba(232,168,124,0.2) 0%, transparent 60%);
-      pointer-events: none;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-    }
-
-    .hero-emoji {
-      font-size: 48px;
-      margin-bottom: var(--space-4);
-    }
-
-    .hero-title {
-      font-size: var(--text-3xl);
-      font-weight: 700;
-      color: white;
-      margin-bottom: var(--space-2);
-      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    .hero-subtitle {
-      font-size: var(--text-base);
-      color: rgba(255,255,255,0.85);
-      margin-bottom: var(--space-6);
-    }
-
-    .search-box {
-      max-width: 600px;
-      margin: 0 auto;
-      position: relative;
-    }
-
-    .search-input-wrap {
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-
-    .search-icon {
-      position: absolute;
-      left: var(--space-4);
-      color: var(--color-text-tertiary);
-      font-size: 20px;
-      pointer-events: none;
-    }
-
-    .search-input {
-      width: 100%;
-      padding: var(--space-4) var(--space-12) var(--space-4) var(--space-12);
-      font-size: var(--text-lg);
-      border: 2px solid transparent;
-      border-radius: var(--radius-xl);
-      background: white;
-      box-shadow: var(--shadow-lg);
-      transition: all var(--transition-fast);
-    }
-
-    .search-input:focus {
-      outline: none;
-      border-color: var(--color-primary);
-      box-shadow: var(--shadow-xl), var(--shadow-glow);
-    }
-
-    .search-input::placeholder {
-      color: var(--color-text-tertiary);
-    }
-
-    .search-clear {
-      position: absolute;
-      right: var(--space-4);
-      width: 28px;
-      height: 28px;
-      border-radius: var(--radius-full);
-      background: var(--color-border-light);
-      color: var(--color-text-tertiary);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      transition: all var(--transition-fast);
-    }
-
-    .search-clear.visible {
-      display: flex;
-    }
-
-    .search-clear:hover {
-      background: var(--color-border);
-      color: var(--color-text-secondary);
-    }
-
-    .search-hints {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: var(--space-2);
-      margin-top: var(--space-4);
-    }
-
-    .search-hint {
-      padding: var(--space-1) var(--space-3);
-      background: rgba(255,255,255,0.2);
-      border-radius: var(--radius-full);
-      font-size: var(--text-xs);
-      color: white;
-      cursor: pointer;
-      transition: all var(--transition-fast);
-      border: 1px solid rgba(255,255,255,0.2);
-    }
-
-    .search-hint:hover {
-      background: rgba(255,255,255,0.3);
-      border-color: rgba(255,255,255,0.4);
-    }
-
-    /* ========================================
-       统计卡片
-    ======================================== */
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: var(--space-4);
-      margin-bottom: var(--space-8);
-    }
-
-    .stat-card {
-      background: var(--color-surface);
-      border-radius: var(--radius-lg);
-      padding: var(--space-5);
-      box-shadow: var(--shadow-xs);
-      border: 1px solid var(--color-border-light);
-      transition: all var(--transition-fast);
-    }
-
-    .stat-card:hover {
-      box-shadow: var(--shadow-sm);
-      transform: translateY(-2px);
-    }
-
-    .stat-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: var(--radius-md);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      margin-bottom: var(--space-3);
-    }
-
-    .stat-icon.primary { background: var(--color-primary-100); }
-    .stat-icon.secondary { background: #FEF3E2; }
-    .stat-icon.accent { background: #FCE7F3; }
-    .stat-icon.info { background: #DBEAFE; }
-
-    .stat-value {
-      font-size: var(--text-2xl);
-      font-weight: 700;
-      color: var(--color-text-primary);
-      margin-bottom: var(--space-1);
-    }
-
-    .stat-label {
-      font-size: var(--text-sm);
-      color: var(--color-text-tertiary);
-    }
-
-    /* ========================================
-       区域标题
-    ======================================== */
-    .section {
-      margin-bottom: var(--space-10);
-    }
-
-    .section-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: var(--space-5);
-    }
-
-    .section-title {
-      display: flex;
-      align-items: center;
-      gap: var(--space-2);
-      font-size: var(--text-xl);
-      font-weight: 600;
-    }
-
-    .section-title .emoji {
-      font-size: 24px;
-    }
-
-    .section-more {
-      font-size: var(--text-sm);
-      color: var(--color-primary);
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      gap: var(--space-1);
-    }
-
-    .section-more:hover {
-      color: var(--color-primary-dark);
-    }
-
-    /* ========================================
-       物品卡片网格
-    ======================================== */
-    .items-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: var(--space-4);
-    }
-
-    .item-card {
-      background: var(--color-surface);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      box-shadow: var(--shadow-xs);
-      border: 1px solid var(--color-border-light);
-      transition: all var(--transition-base);
-      cursor: pointer;
-    }
-
-    .item-card:hover {
-      box-shadow: var(--shadow-md);
-      transform: translateY(-4px);
-      border-color: var(--color-primary-100);
-    }
-
-    .item-photo {
-      width: 100%;
-      aspect-ratio: 1;
-      background: var(--color-bg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 48px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .item-photo img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .item-photo-placeholder {
-      color: var(--color-text-tertiary);
-    }
-
-    .item-tags {
-      position: absolute;
-      top: var(--space-2);
-      left: var(--space-2);
-      display: flex;
-      gap: var(--space-1);
-      flex-wrap: wrap;
-    }
-
-    .item-tag {
-      padding: 2px 8px;
-      background: rgba(0,0,0,0.5);
-      color: white;
-      border-radius: var(--radius-full);
-      font-size: 10px;
-      font-weight: 500;
-    }
-
-    .item-info {
-      padding: var(--space-4);
-    }
-
-    .item-name {
-      font-weight: 600;
-      font-size: var(--text-base);
-      margin-bottom: var(--space-2);
-      color: var(--color-text-primary);
-    }
-
-    .item-location {
-      display: flex;
-      align-items: center;
-      gap: var(--space-1);
-      font-size: var(--text-xs);
-      color: var(--color-text-tertiary);
-    }
-
-    .item-location .room {
-      color: var(--color-primary);
-      font-weight: 500;
-    }
-
-    /* ========================================
-       侧边栏 - 房间列表
-    ======================================== */
-    .sidebar-title {
-      font-size: var(--text-sm);
-      font-weight: 600;
-      color: var(--color-text-tertiary);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: var(--space-3);
-      padding: 0 var(--space-2);
-    }
-
-    .room-list {
-      list-style: none;
-    }
-
-    .room-item {
-      display: flex;
-      align-items: center;
-      gap: var(--space-3);
-      padding: var(--space-3);
-      border-radius: var(--radius-md);
-      cursor: pointer;
-      transition: all var(--transition-fast);
-      margin-bottom: var(--space-1);
-    }
-
-    .room-item:hover {
-      background: var(--color-primary-50);
-    }
-
-    .room-item.active {
-      background: var(--color-primary-100);
-    }
-
-    .room-emoji {
-      font-size: 24px;
-      width: 36px;
-      height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--color-bg);
-      border-radius: var(--radius-md);
-    }
-
-    .room-name {
-      flex: 1;
-      font-size: var(--text-sm);
-      font-weight: 500;
-    }
-
-    .room-item.active .room-name {
-      color: var(--color-primary-dark);
-      font-weight: 600;
-    }
-
-    .room-count {
-      font-size: var(--text-xs);
-      color: var(--color-text-tertiary);
-      background: var(--color-bg);
-      padding: 2px 8px;
-      border-radius: var(--radius-full);
-    }
-
-    .room-item.active .room-count {
-      background: var(--color-primary);
-      color: white;
-    }
-
-    .sidebar-divider {
-      height: 1px;
-      background: var(--color-border-light);
-      margin: var(--space-5) var(--space-2);
-    }
-
-    /* ========================================
-       添加物品模态框
-    ======================================== */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-      backdrop-filter: blur(4px);
-      z-index: 1000;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: var(--space-6);
-      opacity: 0;
-      transition: opacity var(--transition-base);
-    }
-
-    .modal-overlay.open {
-      display: flex;
-      opacity: 1;
-    }
-
-    .modal {
-      background: var(--color-surface);
-      border-radius: var(--radius-xl);
-      width: 100%;
-      max-width: 560px;
-      max-height: 90vh;
-      overflow: hidden;
-      box-shadow: var(--shadow-xl);
-      transform: translateY(20px) scale(0.95);
-      transition: transform var(--transition-base);
-    }
-
-    .modal-overlay.open .modal {
-      transform: translateY(0) scale(1);
-    }
-
-    .modal-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: var(--space-5) var(--space-6);
-      border-bottom: 1px solid var(--color-border-light);
-    }
-
-    .modal-title {
-      font-size: var(--text-lg);
-      font-weight: 600;
-    }
-
-    .modal-close {
-      width: 32px;
-      height: 32px;
-      border-radius: var(--radius-md);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--color-text-tertiary);
-      transition: all var(--transition-fast);
-    }
-
-    .modal-close:hover {
-      background: var(--color-bg);
-      color: var(--color-text-primary);
-    }
-
-    .modal-body {
-      padding: var(--space-6);
-      overflow-y: auto;
-      max-height: calc(90vh - 140px);
-    }
-
-    /* 照片上传区 */
-    .photo-upload {
-      border: 2px dashed var(--color-border);
-      border-radius: var(--radius-lg);
-      padding: var(--space-8);
-      text-align: center;
-      cursor: pointer;
-      transition: all var(--transition-fast);
-      margin-bottom: var(--space-6);
-      background: var(--color-bg);
-    }
-
-    .photo-upload:hover {
-      border-color: var(--color-primary-light);
-      background: var(--color-primary-50);
-    }
-
-    .photo-upload.has-photo {
-      padding: 0;
-      border-style: solid;
-      border-color: var(--color-primary-100);
-    }
-
-    .photo-upload-icon {
-      font-size: 48px;
-      margin-bottom: var(--space-3);
-    }
-
-    .photo-upload-text {
-      color: var(--color-text-secondary);
-      font-size: var(--text-sm);
-    }
-
-    .photo-upload-hint {
-      color: var(--color-text-tertiary);
-      font-size: var(--text-xs);
-      margin-top: var(--space-2);
-    }
-
-    .photo-preview {
-      width: 100%;
-      aspect-ratio: 16/9;
-      object-fit: cover;
-      border-radius: var(--radius-md);
-    }
-
-    /* 表单 */
-    .form-group {
-      margin-bottom: var(--space-5);
-    }
-
-    .form-label {
-      display: block;
-      font-size: var(--text-sm);
-      font-weight: 500;
-      margin-bottom: var(--space-2);
-      color: var(--color-text-primary);
-    }
-
-    .form-input {
-      width: 100%;
-      padding: var(--space-3) var(--space-4);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-md);
-      font-size: var(--text-base);
-      background: var(--color-surface);
-      transition: all var(--transition-fast);
-    }
-
-    .form-input:focus {
-      outline: none;
-      border-color: var(--color-primary);
-      box-shadow: var(--shadow-glow);
-    }
-
-    .form-input::placeholder {
-      color: var(--color-text-tertiary);
-    }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--space-4);
-    }
-
-    /* 标签选择器 */
-    .tag-selector {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-2);
-    }
-
-    .tag-option {
-      padding: var(--space-2) var(--space-3);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-full);
-      font-size: var(--text-sm);
-      cursor: pointer;
-      transition: all var(--transition-fast);
-      background: var(--color-surface);
-    }
-
-    .tag-option:hover {
-      border-color: var(--color-primary-light);
-      background: var(--color-primary-50);
-    }
-
-    .tag-option.selected {
-      background: var(--color-primary);
-      color: white;
-      border-color: var(--color-primary);
-    }
-
-    /* 房间选择器 */
-    .room-selector {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: var(--space-2);
-    }
-
-    .room-option {
-      padding: var(--space-3);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-md);
-      text-align: center;
-      cursor: pointer;
-      transition: all var(--transition-fast);
-      background: var(--color-surface);
-    }
-
-    .room-option:hover {
-      border-color: var(--color-primary-light);
-      background: var(--color-primary-50);
-    }
-
-    .room-option.selected {
-      border-color: var(--color-primary);
-      background: var(--color-primary-100);
-    }
-
-    .room-option .emoji {
-      font-size: 24px;
-      display: block;
-      margin-bottom: var(--space-1);
-    }
-
-    .room-option .name {
-      font-size: var(--text-xs);
-      color: var(--color-text-secondary);
-    }
-
-    .room-option.selected .name {
-      color: var(--color-primary-dark);
-      font-weight: 500;
-    }
-
-    .modal-footer {
-      display: flex;
-      gap: var(--space-3);
-      padding: var(--space-5) var(--space-6);
-      border-top: 1px solid var(--color-border-light);
-      background: var(--color-bg);
-    }
-
-    .modal-footer .btn {
-      flex: 1;
-      padding: var(--space-3);
-    }
-
-    /* ========================================
-       搜索结果
-    ======================================== */
-    .search-results {
-      display: none;
-    }
-
-    .search-results.active {
-      display: block;
-    }
-
-    .search-results-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: var(--space-5);
-    }
-
-    .search-results-count {
-      font-size: var(--text-sm);
-      color: var(--color-text-tertiary);
-    }
-
-    .search-results-count strong {
-      color: var(--color-primary);
-    }
-
-    .no-results {
-      text-align: center;
-      padding: var(--space-16) var(--space-8);
-    }
-
-    .no-results-icon {
-      font-size: 64px;
-      margin-bottom: var(--space-4);
-      opacity: 0.5;
-    }
-
-    .no-results-title {
-      font-size: var(--text-xl);
-      font-weight: 600;
-      margin-bottom: var(--space-2);
-    }
-
-    .no-results-text {
-      color: var(--color-text-tertiary);
-      margin-bottom: var(--space-6);
-    }
-
-    /* ========================================
-       详情模态框
-    ======================================== */
-    .detail-modal .modal {
-      max-width: 700px;
-    }
-
-    .detail-image {
-      width: 100%;
-      max-height: 400px;
-      object-fit: contain;
-      background: var(--color-bg);
-    }
-
-    .detail-content {
-      padding: var(--space-6);
-    }
-
-    .detail-name {
-      font-size: var(--text-2xl);
-      font-weight: 700;
-      margin-bottom: var(--space-3);
-    }
-
-    .detail-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-3);
-      margin-bottom: var(--space-6);
-    }
-
-    .detail-meta-item {
-      display: flex;
-      align-items: center;
-      gap: var(--space-2);
-      padding: var(--space-2) var(--space-3);
-      background: var(--color-bg);
-      border-radius: var(--radius-md);
-      font-size: var(--text-sm);
-    }
-
-    .detail-meta-item .icon {
-      font-size: 16px;
-    }
-
-    .detail-description {
-      color: var(--color-text-secondary);
-      line-height: 1.7;
-      margin-bottom: var(--space-6);
-    }
-
-    .detail-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-2);
-    }
-
-    .detail-tag {
-      padding: var(--space-1) var(--space-3);
-      background: var(--color-primary-100);
-      color: var(--color-primary-dark);
-      border-radius: var(--radius-full);
-      font-size: var(--text-sm);
-    }
-
-    .detail-actions {
-      display: flex;
-      gap: var(--space-3);
-      margin-top: var(--space-6);
-      padding-top: var(--space-6);
-      border-top: 1px solid var(--color-border-light);
-    }
-
-    .detail-actions .btn {
-      flex: 1;
-    }
-
-    /* ========================================
-       空状态
-    ======================================== */
-    .empty-state {
-      text-align: center;
-      padding: var(--space-16) var(--space-8);
-    }
-
-    .empty-state-icon {
-      font-size: 64px;
-      margin-bottom: var(--space-4);
-    }
-
-    .empty-state-title {
-      font-size: var(--text-xl);
-      font-weight: 600;
-      margin-bottom: var(--space-2);
-    }
-
-    .empty-state-text {
-      color: var(--color-text-tertiary);
-      margin-bottom: var(--space-6);
-      max-width: 400px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    /* ========================================
-       动画
-    ======================================== */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
-
-    .animate-fadeIn {
-      animation: fadeIn var(--transition-base) ease-out;
-    }
-
-    .animate-pulse {
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    /* ========================================
-       响应式设计
-    ======================================== */
-    @media (max-width: 1024px) {
-      .sidebar {
-        display: none;
-      }
-
-      .stats-row {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 640px) {
-      .hero-search {
-        padding: var(--space-8) var(--space-5);
-        border-radius: var(--radius-lg);
-        margin-bottom: var(--space-6);
-      }
-
-      .hero-title {
-        font-size: var(--text-2xl);
-      }
-
-      .hero-subtitle {
-        font-size: var(--text-sm);
-      }
-
-      .stats-row {
-        grid-template-columns: repeat(2, 1fr);
-        gap: var(--space-3);
-      }
-
-      .content {
-        padding: var(--space-5);
-      }
-
-      .items-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: var(--space-3);
-      }
-
-      .form-row {
-        grid-template-columns: 1fr;
-      }
-
-      .room-selector {
-        grid-template-columns: repeat(3, 1fr);
-      }
-
-      .nav-links {
-        display: none;
-      }
-    }
-
-    /* ========================================
-       Toast 提示
-    ======================================== */
-    .toast {
-      position: fixed;
-      bottom: var(--space-8);
-      left: 50%;
-      transform: translateX(-50%) translateY(100px);
-      background: var(--color-text-primary);
-      color: white;
-      padding: var(--space-3) var(--space-6);
-      border-radius: var(--radius-full);
-      font-size: var(--text-sm);
-      font-weight: 500;
-      box-shadow: var(--shadow-lg);
-      z-index: 2000;
-      opacity: 0;
-      transition: all var(--transition-base);
-    }
-
-    .toast.show {
-      transform: translateX(-50%) translateY(0);
-      opacity: 1;
-    }
-
-    .toast.success {
-      background: var(--color-success);
-    }
-
-    .toast.error {
-      background: var(--color-error);
-    }
-  </style>
+/* ===================================================
+   DESIGN TOKENS
+=================================================== */
+:root {
+  --brand:        #4E8B6C;
+  --brand-light:  #6FA98C;
+  --brand-dark:   #346350;
+  --brand-50:     #EFF7F3;
+  --brand-100:    #D5EDE2;
+
+  --orange:       #E8956B;
+  --red:          #EF4444;
+  --red-light:    #FEE2E2;
+  --yellow:       #F59E0B;
+  --blue:         #3B82F6;
+  --purple:       #8B5CF6;
+  --teal:         #14B8A6;
+
+  --bg:           #F0F4F8;
+  --surface:      #FFFFFF;
+  --surface2:     #F5F7FA;
+  --border:       #E2E8F0;
+  --border-light: #F1F5F9;
+
+  --text1:        #0F172A;
+  --text2:        #475569;
+  --text3:        #94A3B8;
+  --text-inv:     #FFFFFF;
+
+  --r-sm: 8px; --r-md: 12px; --r-lg: 16px;
+  --r-xl: 20px; --r-2xl: 24px; --r-3xl: 28px;
+  --r-full: 9999px;
+
+  --sh-xs: 0 1px 3px rgba(0,0,0,.06);
+  --sh-sm: 0 2px 8px rgba(0,0,0,.08);
+  --sh-md: 0 4px 16px rgba(0,0,0,.10);
+  --sh-lg: 0 8px 32px rgba(0,0,0,.13);
+  --sh-xl: 0 16px 48px rgba(0,0,0,.16);
+  --sh-brand: 0 4px 20px rgba(78,139,108,.28);
+
+  --ease-spring: cubic-bezier(.34,1.56,.64,1);
+  --ease:        cubic-bezier(.4,0,.2,1);
+  --fast: 150ms var(--ease);
+  --base: 250ms var(--ease);
+
+  --font: 'Inter', 'Noto Sans SC', -apple-system, system-ui, sans-serif;
+  --sidebar-w: 272px;
+  --header-h: 62px;
+  --bottom-h: 68px;
+}
+
+/* Dark Theme */
+[data-theme="dark"] {
+  --brand:       #5FA882;
+  --brand-light: #7DC4A0;
+  --brand-dark:  #3D7D62;
+  --brand-50:    #1A2E24;
+  --brand-100:   #1F3B2C;
+  --bg:          #0C1117;
+  --surface:     #151820;
+  --surface2:    #1C2030;
+  --border:      #252B3B;
+  --border-light:#1A1F2C;
+  --text1:       #F1F5F9;
+  --text2:       #94A3B8;
+  --text3:       #64748B;
+}
+
+/* ===================================================
+   RESET & BASE
+=================================================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text1);
+  line-height: 1.6;
+  min-height: 100vh;
+  transition: background var(--base), color var(--base);
+}
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+input, textarea, select { font-family: inherit; font-size: inherit; }
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+::selection { background: var(--brand-100); color: var(--brand-dark); }
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: var(--r-full); }
+
+/* ===================================================
+   HEADER
+=================================================== */
+.header {
+  position: sticky; top: 0; z-index: 200;
+  height: var(--header-h);
+  background: rgba(240,244,248,.82);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-bottom: 1px solid var(--border-light);
+  transition: background var(--base);
+}
+[data-theme="dark"] .header { background: rgba(12,17,23,.85); }
+
+.header-inner {
+  max-width: 1280px; margin: 0 auto;
+  padding: 0 20px;
+  height: 100%;
+  display: flex; align-items: center; gap: 12px;
+}
+
+.logo {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 17px; font-weight: 800; flex-shrink: 0;
+  color: var(--text1);
+}
+.logo-mark {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-light) 100%);
+  border-radius: var(--r-md);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: var(--sh-brand);
+  flex-shrink: 0;
+}
+.logo-mark svg { color: white; }
+
+.header-search {
+  flex: 1; max-width: 420px;
+  position: relative; display: flex; align-items: center;
+}
+.header-search-icon {
+  position: absolute; left: 13px;
+  color: var(--text3); pointer-events: none;
+  display: flex;
+}
+.header-search input {
+  width: 100%;
+  padding: 9px 40px 9px 40px;
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-full);
+  font-size: 14px;
+  color: var(--text1);
+  transition: all var(--fast);
+}
+.header-search input:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(78,139,108,.12);
+  background: var(--surface);
+}
+.header-search input::placeholder { color: var(--text3); }
+.search-kbd {
+  position: absolute; right: 12px;
+  background: var(--border); color: var(--text3);
+  font-size: 11px; padding: 2px 7px; border-radius: 4px;
+  font-family: monospace; pointer-events: none;
+}
+
+.header-right { margin-left: auto; display: flex; align-items: center; gap: 6px; }
+
+/* Lang Toggle */
+.lang-toggle {
+  display: flex; align-items: center;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-full);
+  padding: 3px;
+  gap: 2px;
+}
+.lang-btn {
+  padding: 4px 10px;
+  border-radius: var(--r-full);
+  font-size: 12px; font-weight: 600;
+  color: var(--text3);
+  transition: all var(--fast);
+}
+.lang-btn.active {
+  background: var(--surface);
+  color: var(--brand);
+  box-shadow: var(--sh-xs);
+}
+.lang-btn:hover:not(.active) { color: var(--text2); }
+
+/* Icon Button */
+.icon-btn {
+  width: 38px; height: 38px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: var(--r-md);
+  color: var(--text2);
+  transition: all var(--fast);
+}
+.icon-btn:hover { background: var(--surface2); color: var(--text1); }
+
+.btn-add {
+  display: flex; align-items: center; gap: 7px;
+  padding: 8px 18px;
+  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-light) 100%);
+  color: white;
+  border-radius: var(--r-full);
+  font-size: 14px; font-weight: 600;
+  box-shadow: var(--sh-brand);
+  transition: all var(--fast);
+  white-space: nowrap;
+}
+.btn-add:hover { transform: translateY(-1px); box-shadow: var(--sh-md); }
+.btn-add:active { transform: translateY(0); }
+
+/* ===================================================
+   LAYOUT
+=================================================== */
+.layout {
+  max-width: 1280px; margin: 0 auto;
+  display: flex; min-height: calc(100vh - var(--header-h));
+}
+
+/* ===================================================
+   SIDEBAR
+=================================================== */
+.sidebar {
+  width: var(--sidebar-w); flex-shrink: 0;
+  padding: 20px 12px;
+  border-right: 1px solid var(--border-light);
+  background: var(--surface);
+  position: sticky; top: var(--header-h);
+  height: calc(100vh - var(--header-h));
+  overflow-y: auto;
+}
+
+.sb-label {
+  padding: 4px 10px 8px;
+  font-size: 11px; font-weight: 600;
+  color: var(--text3);
+  text-transform: uppercase; letter-spacing: .07em;
+}
+
+.sb-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 10px;
+  border-radius: var(--r-md);
+  cursor: pointer;
+  transition: all var(--fast);
+  margin-bottom: 2px;
+}
+.sb-item:hover { background: var(--brand-50); }
+.sb-item.active { background: var(--brand-100); }
+
+.sb-icon {
+  width: 34px; height: 34px;
+  border-radius: var(--r-sm);
+  background: var(--surface2);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text2);
+  flex-shrink: 0;
+  transition: all var(--fast);
+}
+.sb-item.active .sb-icon { background: var(--brand); color: white; }
+.sb-item:hover .sb-icon { color: var(--brand); }
+
+.sb-name { flex: 1; font-size: 14px; font-weight: 500; }
+.sb-item.active .sb-name { color: var(--brand-dark); font-weight: 600; }
+
+.sb-count {
+  font-size: 12px; color: var(--text3);
+  background: var(--surface2);
+  padding: 2px 8px; border-radius: var(--r-full);
+  min-width: 28px; text-align: center;
+}
+.sb-item.active .sb-count { background: var(--brand); color: white; }
+
+.sb-divider { height: 1px; background: var(--border-light); margin: 12px 10px; }
+
+/* ===================================================
+   CONTENT
+=================================================== */
+.content { flex: 1; padding: 28px 24px; min-width: 0; }
+
+/* ===================================================
+   HERO
+=================================================== */
+.hero {
+  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-light) 50%, #5DB583 100%);
+  border-radius: var(--r-3xl);
+  padding: 40px 36px;
+  margin-bottom: 24px;
+  position: relative; overflow: hidden;
+  box-shadow: var(--sh-lg);
+}
+.hero::before {
+  content: '';
+  position: absolute; top: -50%; right: -20%;
+  width: 60%; height: 200%;
+  background: radial-gradient(ellipse, rgba(255,255,255,.16) 0%, transparent 65%);
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute; bottom: -30%; left: -10%;
+  width: 40%; height: 120%;
+  background: radial-gradient(ellipse, rgba(255,255,255,.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero-body { position: relative; z-index: 1; }
+.hero-title { font-size: 28px; font-weight: 800; color: white; margin-bottom: 6px; letter-spacing: -.3px; }
+.hero-sub { font-size: 14px; color: rgba(255,255,255,.8); margin-bottom: 22px; font-weight: 400; }
+
+.hero-search-wrap { max-width: 580px; position: relative; }
+.hero-search-icon {
+  position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+  color: var(--text3); pointer-events: none; display: flex;
+}
+.hero-input {
+  width: 100%;
+  padding: 15px 52px 15px 46px;
+  font-size: 16px;
+  border: 2.5px solid transparent;
+  border-radius: var(--r-xl);
+  background: white;
+  box-shadow: var(--sh-xl);
+  transition: all var(--fast);
+  color: var(--text1);
+}
+.hero-input:focus { outline: none; border-color: rgba(255,255,255,.5); box-shadow: var(--sh-xl), 0 0 0 4px rgba(255,255,255,.2); }
+.hero-input::placeholder { color: var(--text3); }
+.hero-clear {
+  position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+  width: 28px; height: 28px;
+  border-radius: var(--r-full);
+  background: var(--border);
+  display: none; align-items: center; justify-content: center;
+  color: var(--text3);
+  transition: all var(--fast);
+}
+.hero-clear.show { display: flex; }
+.hero-clear:hover { background: var(--text3); color: white; }
+
+.hero-hints {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px;
+}
+.hint-chip {
+  display: flex; align-items: center; gap: 5px;
+  padding: 5px 13px;
+  background: rgba(255,255,255,.2);
+  border: 1px solid rgba(255,255,255,.25);
+  border-radius: var(--r-full);
+  font-size: 12px; color: white;
+  cursor: pointer; transition: all var(--fast);
+  backdrop-filter: blur(4px);
+}
+.hint-chip:hover { background: rgba(255,255,255,.32); transform: translateY(-1px); }
+
+/* ===================================================
+   ALERT BANNER (过期/预警)
+=================================================== */
+.alert-banner {
+  background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+  border: 1px solid #FCD34D;
+  border-radius: var(--r-xl);
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  display: flex; align-items: flex-start; gap: 12px;
+  position: relative; overflow: hidden;
+  animation: slideDown 300ms var(--ease-spring);
+}
+.alert-banner::before {
+  content: '';
+  position: absolute; top: 0; right: 0;
+  width: 200px; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.15));
+  pointer-events: none;
+}
+[data-theme="dark"] .alert-banner { background: linear-gradient(135deg, #2A1F00 0%, #3B2A00 100%); border-color: #78350F; }
+.alert-banner-icon { color: #D97706; flex-shrink: 0; margin-top: 1px; }
+[data-theme="dark"] .alert-banner-icon { color: #FBBF24; }
+.alert-banner-body { flex: 1; }
+.alert-banner-title { font-size: 14px; font-weight: 700; color: #78350F; margin-bottom: 3px; }
+[data-theme="dark"] .alert-banner-title { color: #FCD34D; }
+.alert-banner-list { font-size: 13px; color: #92400E; list-style: none; }
+[data-theme="dark"] .alert-banner-list { color: #F59E0B; }
+.alert-banner-list li::before { content: '• '; font-weight: 700; margin-right: 4px; }
+
+/* ===================================================
+   STATS ROW
+=================================================== */
+.stats-row {
+  display: grid; grid-template-columns: repeat(4,1fr); gap: 14px;
+  margin-bottom: 28px;
+}
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--r-xl);
+  padding: 18px;
+  box-shadow: var(--sh-xs);
+  transition: all var(--base);
+  position: relative; overflow: hidden;
+}
+.stat-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  border-radius: var(--r-xl) var(--r-xl) 0 0;
+}
+.stat-card:nth-child(1)::before { background: linear-gradient(90deg, var(--brand), var(--brand-light)); }
+.stat-card:nth-child(2)::before { background: linear-gradient(90deg, var(--orange), #FB923C); }
+.stat-card:nth-child(3)::before { background: linear-gradient(90deg, var(--purple), #A78BFA); }
+.stat-card:nth-child(4)::before { background: linear-gradient(90deg, var(--red), #F87171); }
+.stat-card:hover { box-shadow: var(--sh-md); transform: translateY(-3px); }
+
+.stat-ic {
+  width: 40px; height: 40px;
+  border-radius: var(--r-md);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 12px;
+}
+.stat-ic.green  { background: var(--brand-100); color: var(--brand); }
+.stat-ic.orange { background: #FEF3E2; color: #D97706; }
+.stat-ic.purple { background: #EDE9FE; color: #7C3AED; }
+.stat-ic.red   { background: var(--red-light); color: #DC2626; }
+[data-theme="dark"] .stat-ic.orange { background: #3B2A12; color: #FBBF24; }
+[data-theme="dark"] .stat-ic.purple { background: #2D1F4A; color: #A78BFA; }
+[data-theme="dark"] .stat-ic.red   { background: #2A1010; color: #F87171; }
+
+.stat-val { font-size: 26px; font-weight: 800; margin-bottom: 3px; letter-spacing: -.5px; }
+.stat-lbl { font-size: 12px; color: var(--text3); font-weight: 500; }
+
+/* ===================================================
+   SECTION
+=================================================== */
+.section { margin-bottom: 32px; }
+.section-hd {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+}
+.section-title {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 18px; font-weight: 700;
+}
+.section-title-icon {
+  width: 32px; height: 32px;
+  border-radius: var(--r-md);
+  background: var(--brand-100);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--brand);
+}
+.section-link {
+  font-size: 13px; color: var(--brand); font-weight: 600;
+  display: flex; align-items: center; gap: 4px;
+  transition: all var(--fast);
+}
+.section-link:hover { color: var(--brand-dark); transform: translateX(2px); }
+
+/* ===================================================
+   EXPIRED / URGENT PIN SECTION
+=================================================== */
+.expired-section {
+  background: linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%);
+  border: 1px solid #FECACA;
+  border-radius: var(--r-xl);
+  padding: 18px;
+  margin-bottom: 24px;
+  position: relative; overflow: hidden;
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+.expired-section::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--red), #F87171, var(--red));
+  background-size: 200% 100%;
+  animation: shimmer 2s linear infinite;
+}
+[data-theme="dark"] .expired-section {
+  background: linear-gradient(135deg, #2A1010 0%, #3A1515 100%);
+  border-color: #7F1D1D;
+}
+
+.expired-hd {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 14px;
+}
+.expired-hd-icon {
+  width: 36px; height: 36px;
+  border-radius: var(--r-md);
+  background: #FEE2E2;
+  color: #DC2626;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+[data-theme="dark"] .expired-hd-icon { background: #7F1D1D; color: #F87171; }
+.expired-hd-title { font-size: 16px; font-weight: 700; color: #991B1B; }
+[data-theme="dark"] .expired-hd-title { color: #F87171; }
+.expired-hd-count {
+  margin-left: auto;
+  background: var(--red); color: white;
+  font-size: 12px; font-weight: 700;
+  padding: 3px 10px; border-radius: var(--r-full);
+}
+
+.expired-list { display: flex; flex-direction: column; gap: 8px; }
+.expired-item {
+  display: flex; align-items: center; gap: 10px;
+  background: white;
+  border-radius: var(--r-lg);
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: all var(--fast);
+  border: 1px solid #FECACA;
+}
+.expired-item:hover { box-shadow: var(--sh-sm); transform: translateX(3px); border-color: #FCA5A5; }
+[data-theme="dark"] .expired-item { background: var(--surface); border-color: #7F1D1D; }
+
+.expired-item-icon {
+  width: 38px; height: 38px;
+  border-radius: var(--r-md);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.expired-item-info { flex: 1; min-width: 0; }
+.expired-item-name { font-size: 14px; font-weight: 600; color: var(--text1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.expired-item-meta { font-size: 12px; color: var(--text3); margin-top: 2px; }
+.expired-item-badge {
+  flex-shrink: 0;
+  padding: 4px 10px;
+  border-radius: var(--r-full);
+  font-size: 11px; font-weight: 700;
+}
+.expired-item-badge.overdue { background: var(--red-light); color: #DC2626; }
+.expired-item-badge.warning { background: #FEF3C2; color: #D97706; }
+[data-theme="dark"] .expired-item-badge.overdue { background: #7F1D1D; color: #F87171; }
+[data-theme="dark"] .expired-item-badge.warning { background: #78350F; color: #FBBF24; }
+
+/* ===================================================
+   ITEMS GRID
+=================================================== */
+.items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(176px, 1fr));
+  gap: 14px;
+}
+
+.item-card {
+  background: var(--surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all var(--base);
+  box-shadow: var(--sh-xs);
+  position: relative;
+  animation: fadeInUp 300ms var(--ease) both;
+}
+.item-card:hover {
+  box-shadow: var(--sh-lg);
+  transform: translateY(-5px);
+  border-color: var(--brand-100);
+}
+
+.item-thumb {
+  width: 100%; aspect-ratio: 1;
+  background: var(--surface2);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.item-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+.item-type-icon {
+  width: 60px; height: 60px;
+  border-radius: var(--r-xl);
+  display: flex; align-items: center; justify-content: center;
+  opacity: .9;
+}
+
+.item-badge-row {
+  position: absolute; top: 8px; left: 8px;
+  display: flex; gap: 4px; flex-wrap: wrap; max-width: calc(100% - 44px);
+}
+.item-badge {
+  padding: 2px 8px;
+  background: rgba(0,0,0,.5);
+  color: white;
+  border-radius: var(--r-full);
+  font-size: 10px; font-weight: 500;
+  backdrop-filter: blur(4px);
+}
+
+.item-alert {
+  position: absolute; top: 8px; right: 8px;
+  width: 22px; height: 22px;
+  border-radius: var(--r-full);
+  display: flex; align-items: center; justify-content: center;
+}
+.item-alert.warn { background: #FEF3C2; color: #D97706; }
+.item-alert.danger { background: var(--red-light); color: #DC2626; }
+.item-alert.low-stock { background: #DBEAFE; color: #2563EB; }
+[data-theme="dark"] .item-alert.warn { background: #78350F; color: #FBBF24; }
+[data-theme="dark"] .item-alert.danger { background: #7F1D1D; color: #F87171; }
+[data-theme="dark"] .item-alert.low-stock { background: #1E3A5F; color: #60A5FA; }
+
+.item-info { padding: 12px 13px; }
+.item-name { font-size: 14px; font-weight: 600; margin-bottom: 5px; line-height: 1.3; }
+.item-loc {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 12px; color: var(--text3);
+}
+.item-loc .room { color: var(--brand); font-weight: 600; }
+.item-qty {
+  display: inline-flex; align-items: center; gap: 3px;
+  font-size: 11px; color: var(--text3);
+  background: var(--surface2);
+  padding: 2px 8px; border-radius: var(--r-full);
+  margin-top: 7px;
+}
+.item-qty.low { color: var(--blue); background: #DBEAFE; }
+[data-theme="dark"] .item-qty.low { background: #1E3A5F; }
+
+.item-expire-bar {
+  font-size: 11px;
+  padding: 5px 13px;
+  border-top: 1px solid var(--border-light);
+  display: flex; align-items: center; gap: 5px;
+  font-weight: 600;
+}
+.item-expire-bar.danger { background: var(--red-light); color: #DC2626; }
+.item-expire-bar.warn   { background: #FFFBEB; color: #D97706; }
+[data-theme="dark"] .item-expire-bar.danger { background: #2A1010; }
+[data-theme="dark"] .item-expire-bar.warn   { background: #2A2010; }
+
+/* ===================================================
+   SEARCH PANEL
+=================================================== */
+.search-panel { display: none; }
+.search-panel.active { display: block; }
+.search-hd {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+}
+.search-count { font-size: 13px; color: var(--text3); }
+.search-count strong { color: var(--brand); }
+
+.no-result {
+  text-align: center; padding: 60px 20px;
+  grid-column: 1 / -1;
+}
+.no-result-icon {
+  width: 76px; height: 76px;
+  border-radius: var(--r-2xl);
+  background: var(--surface2);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text3);
+  margin: 0 auto 18px;
+}
+.no-result h3 { font-size: 18px; margin-bottom: 6px; }
+.no-result p { color: var(--text3); font-size: 14px; margin-bottom: 22px; }
+
+/* ===================================================
+   EMPTY STATE
+=================================================== */
+.empty { text-align: center; padding: 80px 20px; }
+.empty-icon {
+  width: 84px; height: 84px;
+  border-radius: 28px;
+  background: var(--brand-100);
+  color: var(--brand);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 20px;
+}
+.empty h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+.empty p { color: var(--text3); font-size: 14px; max-width: 320px; margin: 0 auto 24px; }
+
+/* ===================================================
+   BUTTONS
+=================================================== */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  padding: 9px 18px;
+  border-radius: var(--r-md);
+  font-size: 14px; font-weight: 600;
+  transition: all var(--fast);
+  white-space: nowrap;
+}
+.btn:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+.btn-primary {
+  background: linear-gradient(135deg, var(--brand), var(--brand-light));
+  color: white; box-shadow: var(--sh-brand);
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: var(--sh-md); }
+.btn-secondary { background: var(--surface2); color: var(--text1); border: 1px solid var(--border); }
+.btn-secondary:hover { border-color: var(--brand-light); background: var(--brand-50); }
+.btn-danger { background: var(--red-light); color: #DC2626; }
+.btn-danger:hover { background: #FCA5A5; }
+[data-theme="dark"] .btn-danger { background: #7F1D1D; color: #F87171; }
+.btn-lg { padding: 13px 26px; font-size: 15px; border-radius: var(--r-lg); }
+.btn-ghost { background: transparent; color: var(--text2); }
+.btn-ghost:hover { background: var(--surface2); color: var(--text1); }
+
+/* ===================================================
+   MODAL
+=================================================== */
+.overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.48);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 500;
+  display: none; align-items: center; justify-content: center;
+  padding: 16px;
+}
+.overlay.open { display: flex; }
+
+.modal {
+  background: var(--surface);
+  border-radius: var(--r-2xl);
+  width: 100%; max-width: 560px;
+  max-height: 92vh; overflow: hidden;
+  box-shadow: var(--sh-xl);
+  display: flex; flex-direction: column;
+  animation: modalIn 300ms var(--ease-spring);
+}
+.modal-lg { max-width: 700px; }
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(.94) translateY(20px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modal-hd {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 22px 16px;
+  border-bottom: 1px solid var(--border-light);
+  flex-shrink: 0;
+}
+.modal-title { font-size: 18px; font-weight: 700; }
+.modal-close {
+  width: 32px; height: 32px;
+  border-radius: var(--r-sm);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text3); transition: all var(--fast);
+}
+.modal-close:hover { background: var(--surface2); color: var(--text1); }
+
+.modal-body { padding: 22px; overflow-y: auto; flex: 1; }
+
+.modal-ft {
+  display: flex; gap: 10px;
+  padding: 16px 22px;
+  border-top: 1px solid var(--border-light);
+  background: var(--surface2);
+  flex-shrink: 0;
+}
+.modal-ft .btn { flex: 1; justify-content: center; }
+
+/* ===================================================
+   FORM
+=================================================== */
+.form-group { margin-bottom: 16px; }
+.form-label {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 13px; font-weight: 600;
+  color: var(--text2); margin-bottom: 7px;
+}
+.form-input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-md);
+  font-size: 14px;
+  background: var(--surface);
+  color: var(--text1);
+  transition: all var(--fast);
+}
+.form-input:focus { outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px rgba(78,139,108,.1); }
+.form-input::placeholder { color: var(--text3); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-hint { font-size: 12px; color: var(--text3); margin-top: 5px; }
+
+.photo-zone {
+  border: 2px dashed var(--border);
+  border-radius: var(--r-xl);
+  padding: 30px;
+  text-align: center; cursor: pointer;
+  background: var(--surface2);
+  transition: all var(--fast);
+  margin-bottom: 16px;
+}
+.photo-zone:hover { border-color: var(--brand-light); background: var(--brand-50); }
+.photo-zone.filled { padding: 0; border-style: solid; border-color: var(--brand-100); }
+.photo-zone-icon {
+  width: 52px; height: 52px;
+  border-radius: var(--r-lg);
+  background: var(--brand-100);
+  color: var(--brand);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 10px;
+}
+.photo-zone-text { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+.photo-zone-hint { font-size: 12px; color: var(--text3); }
+.photo-preview { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: var(--r-lg); }
+
+.tag-picker { display: flex; flex-wrap: wrap; gap: 8px; }
+.tag-chip {
+  display: flex; align-items: center; gap: 5px;
+  padding: 7px 13px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-full);
+  font-size: 13px; cursor: pointer;
+  background: var(--surface);
+  transition: all var(--fast);
+  color: var(--text2);
+}
+.tag-chip:hover { border-color: var(--brand-light); background: var(--brand-50); }
+.tag-chip.on { background: var(--brand); border-color: var(--brand); color: white; }
+.tag-chip svg { opacity: .65; }
+.tag-chip.on svg { opacity: 1; }
+
+.room-picker { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; }
+.room-chip {
+  padding: 12px 6px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-lg);
+  text-align: center; cursor: pointer;
+  transition: all var(--fast);
+  background: var(--surface);
+}
+.room-chip:hover { border-color: var(--brand-light); background: var(--brand-50); }
+.room-chip.on { border-color: var(--brand); background: var(--brand-100); }
+.room-chip .rc-icon {
+  width: 34px; height: 34px;
+  border-radius: var(--r-sm);
+  background: var(--surface2);
+  color: var(--text2);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 6px;
+  transition: all var(--fast);
+}
+.room-chip.on .rc-icon { background: var(--brand); color: white; }
+.room-chip .rc-name { font-size: 12px; color: var(--text2); font-weight: 500; }
+.room-chip.on .rc-name { color: var(--brand-dark); font-weight: 700; }
+
+.qty-ctrl {
+  display: flex; align-items: center;
+  border: 1.5px solid var(--border); border-radius: var(--r-md);
+  overflow: hidden;
+}
+.qty-btn {
+  width: 38px; height: 40px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text2); background: var(--surface2);
+  transition: all var(--fast);
+}
+.qty-btn:hover { background: var(--brand-100); color: var(--brand); }
+.qty-val {
+  flex: 1; text-align: center;
+  font-size: 15px; font-weight: 700;
+  padding: 0 8px;
+  background: var(--surface);
+  color: var(--text1);
+  border: none; outline: none;
+  width: 60px;
+}
+
+/* ===================================================
+   DETAIL MODAL
+=================================================== */
+.detail-img {
+  width: 100%; max-height: 340px;
+  object-fit: contain;
+  background: var(--surface2);
+}
+.detail-no-img {
+  width: 100%; height: 200px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--surface2);
+}
+.detail-body { padding: 22px; }
+.detail-name { font-size: 24px; font-weight: 800; margin-bottom: 14px; letter-spacing: -.3px; }
+.detail-metas { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.detail-meta {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 13px;
+  background: var(--surface2);
+  border-radius: var(--r-md);
+  font-size: 13px; color: var(--text2);
+}
+.detail-meta svg { color: var(--brand); }
+.detail-desc { color: var(--text2); font-size: 14px; line-height: 1.7; margin-bottom: 16px; }
+.detail-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.detail-tag {
+  padding: 4px 13px;
+  background: var(--brand-100);
+  color: var(--brand-dark);
+  border-radius: var(--r-full);
+  font-size: 13px; font-weight: 600;
+}
+.detail-expire-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 11px 15px;
+  border-radius: var(--r-lg);
+  font-size: 14px; font-weight: 600;
+  margin-top: 14px;
+}
+.detail-expire-row.ok     { background: var(--brand-100); color: var(--brand-dark); }
+.detail-expire-row.warn   { background: #FFFBEB; color: #92400E; }
+.detail-expire-row.danger { background: var(--red-light); color: #991B1B; }
+[data-theme="dark"] .detail-expire-row.ok     { background: var(--brand-50); }
+[data-theme="dark"] .detail-expire-row.warn   { background: #2A2010; color: #FCD34D; }
+[data-theme="dark"] .detail-expire-row.danger { background: #2A1010; color: #F87171; }
+
+.detail-actions { display: flex; gap: 10px; margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--border-light); }
+.detail-actions .btn { flex: 1; justify-content: center; }
+
+/* ===================================================
+   TOAST
+=================================================== */
+.toast {
+  position: fixed; bottom: 84px; left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--text1); color: var(--text-inv);
+  padding: 11px 22px;
+  border-radius: var(--r-full);
+  font-size: 14px; font-weight: 600;
+  box-shadow: var(--sh-xl); z-index: 2000;
+  opacity: 0; transition: all var(--base);
+  white-space: nowrap;
+  display: flex; align-items: center; gap: 8px;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast.ok  { background: #065F46; }
+.toast.err { background: #991B1B; }
+
+/* ===================================================
+   BOTTOM NAV (Mobile)
+=================================================== */
+.bottom-nav {
+  display: none;
+  position: fixed; bottom: 0; left: 0; right: 0;
+  height: var(--bottom-h);
+  background: rgba(240,244,248,.9);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-top: 1px solid var(--border-light);
+  z-index: 300;
+  padding: 0 8px;
+  padding-bottom: env(safe-area-inset-bottom);
+  align-items: center; justify-content: space-around;
+}
+[data-theme="dark"] .bottom-nav { background: rgba(21,24,32,.9); }
+.bn-item {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 3px; padding: 6px 0;
+  border-radius: var(--r-md);
+  cursor: pointer; color: var(--text3);
+  transition: all var(--fast);
+}
+.bn-item.active { color: var(--brand); }
+.bn-item span { font-size: 11px; font-weight: 600; }
+
+.fab {
+  display: none;
+  position: fixed; bottom: calc(var(--bottom-h) + 18px); right: 22px;
+  width: 56px; height: 56px;
+  background: linear-gradient(135deg, var(--brand), var(--brand-light));
+  border-radius: var(--r-full);
+  align-items: center; justify-content: center;
+  color: white; box-shadow: var(--sh-lg);
+  z-index: 300; transition: all var(--fast);
+}
+.fab:hover { transform: scale(1.08); box-shadow: var(--sh-xl); }
+.fab:active { transform: scale(.94); }
+
+/* ===================================================
+   RESPONSIVE
+=================================================== */
+@media (max-width: 1024px) {
+  .sidebar { display: none; }
+  .stats-row { grid-template-columns: repeat(2,1fr); }
+}
+@media (max-width: 640px) {
+  .layout { min-height: calc(100vh - var(--header-h) - var(--bottom-h)); }
+  .content { padding: 16px 12px 84px; }
+  .hero { padding: 26px 18px; border-radius: var(--r-xl); }
+  .hero-title { font-size: 21px; }
+  .stats-row { grid-template-columns: repeat(2,1fr); gap: 10px; }
+  .stat-val { font-size: 22px; }
+  .items-grid { grid-template-columns: repeat(2,1fr); gap: 10px; }
+  .form-row { grid-template-columns: 1fr; }
+  .room-picker { grid-template-columns: repeat(4,1fr); }
+  .btn-add { display: none; }
+  .bottom-nav { display: flex; }
+  .fab { display: flex; }
+  .header-search { display: none; }
+  .lang-toggle { display: none; }
+}
+
+/* ===================================================
+   ANIMATIONS
+=================================================== */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,.08); }
+  50%       { box-shadow: 0 0 0 6px rgba(239,68,68,.0); }
+}
+
+.hidden { display: none !important; }
+.fade-in { animation: fadeInUp 300ms var(--ease) both; }
+</style>
 </head>
 <body>
-  <!-- 头部导航 -->
-  <header class="header">
-    <div class="container header-inner">
-      <a href="#" class="logo">
-        <div class="logo-icon">🏠</div>
-        <span>家里有什么</span>
-      </a>
 
-      <nav class="nav-links">
-        <a href="#" class="nav-link active">首页</a>
-        <a href="#" class="nav-link">房间</a>
-        <a href="#" class="nav-link">统计</a>
-      </nav>
+<!-- ===== HEADER ===== -->
+<header class="header">
+  <div class="header-inner">
+    <a class="logo" href="#">
+      <div class="logo-mark">
+        <i data-lucide="home" width="18" height="18"></i>
+      </div>
+      <span id="appName">家里有什么</span>
+    </a>
 
-      <div class="header-actions">
-        <button class="btn btn-ghost btn-icon" title="设置">⚙️</button>
-        <button class="btn btn-primary" onclick="openAddModal()">
-          <span>➕</span>
-          <span>添加物品</span>
+    <div class="header-search">
+      <span class="header-search-icon">
+        <i data-lucide="search" width="15" height="15"></i>
+      </span>
+      <input type="text" id="topSearch" placeholder="搜索物品… (⌘K)" autocomplete="off" oninput="handleSearch(this.value)">
+      <span class="search-kbd">⌘K</span>
+    </div>
+
+    <div class="header-right">
+      <!-- Language Toggle -->
+      <div class="lang-toggle">
+        <button class="lang-btn active" data-lang="zh" onclick="setLang('zh')">中</button>
+        <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+      </div>
+      <button class="icon-btn" onclick="toggleTheme()" title="切换主题" id="themeBtn">
+        <i data-lucide="moon" width="17" height="17"></i>
+      </button>
+      <button class="btn-add" onclick="openAddModal()">
+        <i data-lucide="plus" width="16" height="16"></i>
+        <span id="addBtnText">添加物品</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ===== LAYOUT ===== -->
+<div class="layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sb-label" data-i18n="rooms">房间</div>
+    <ul id="roomList" style="list-style:none;">
+      <li class="sb-item active" data-room="全部" onclick="filterRoom('全部')">
+        <span class="sb-icon"><i data-lucide="layout-grid" width="15" height="15"></i></span>
+        <span class="sb-name" data-i18n="allItems">全部物品</span>
+        <span class="sb-count" id="cnt-全部">0</span>
+      </li>
+      <li class="sb-item" data-room="客厅" onclick="filterRoom('客厅')">
+        <span class="sb-icon"><i data-lucide="sofa" width="15" height="15"></i></span>
+        <span class="sb-name">客厅</span>
+        <span class="sb-count" id="cnt-客厅">0</span>
+      </li>
+      <li class="sb-item" data-room="卧室" onclick="filterRoom('卧室')">
+        <span class="sb-icon"><i data-lucide="bed-double" width="15" height="15"></i></span>
+        <span class="sb-name">卧室</span>
+        <span class="sb-count" id="cnt-卧室">0</span>
+      </li>
+      <li class="sb-item" data-room="厨房" onclick="filterRoom('厨房')">
+        <span class="sb-icon"><i data-lucide="utensils" width="15" height="15"></i></span>
+        <span class="sb-name">厨房</span>
+        <span class="sb-count" id="cnt-厨房">0</span>
+      </li>
+      <li class="sb-item" data-room="书房" onclick="filterRoom('书房')">
+        <span class="sb-icon"><i data-lucide="book-open" width="15" height="15"></i></span>
+        <span class="sb-name">书房</span>
+        <span class="sb-count" id="cnt-书房">0</span>
+      </li>
+      <li class="sb-item" data-room="洗手间" onclick="filterRoom('洗手间')">
+        <span class="sb-icon"><i data-lucide="shower-head" width="15" height="15"></i></span>
+        <span class="sb-name">洗手间</span>
+        <span class="sb-count" id="cnt-洗手间">0</span>
+      </li>
+      <li class="sb-item" data-room="阳台" onclick="filterRoom('阳台')">
+        <span class="sb-icon"><i data-lucide="trees" width="15" height="15"></i></span>
+        <span class="sb-name">阳台</span>
+        <span class="sb-count" id="cnt-阳台">0</span>
+      </li>
+      <li class="sb-item" data-room="储物间" onclick="filterRoom('储物间')">
+        <span class="sb-icon"><i data-lucide="archive" width="15" height="15"></i></span>
+        <span class="sb-name">储物间</span>
+        <span class="sb-count" id="cnt-储物间">0</span>
+      </li>
+    </ul>
+
+    <div class="sb-divider"></div>
+    <div class="sb-label" data-i18n="actions">操作</div>
+    <ul style="list-style:none;">
+      <li class="sb-item" onclick="openAddModal()">
+        <span class="sb-icon"><i data-lucide="plus-circle" width="15" height="15"></i></span>
+        <span class="sb-name" data-i18n="addItem">添加物品</span>
+      </li>
+      <li class="sb-item" onclick="exportData()">
+        <span class="sb-icon"><i data-lucide="download" width="15" height="15"></i></span>
+        <span class="sb-name" data-i18n="exportData">导出数据</span>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- Content -->
+  <main class="content">
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="hero-body">
+        <h1 class="hero-title" id="heroTitle">家里有什么，一搜就知道</h1>
+        <p class="hero-sub" id="heroSub">拍照录入 · 分类管理 · 到期提醒 · 库存预警</p>
+        <div class="hero-search-wrap">
+          <span class="hero-search-icon">
+            <i data-lucide="search" width="20" height="20"></i>
+          </span>
+          <input class="hero-input" id="heroSearch" type="text"
+            placeholder="搜索物品名称、位置、标签…"
+            autocomplete="off"
+            oninput="handleSearch(this.value)">
+          <button class="hero-clear" id="heroClear" onclick="clearSearch()">
+            <i data-lucide="x" width="12" height="12"></i>
+          </button>
+        </div>
+        <div class="hero-hints">
+          <span class="hint-chip" onclick="qs('护照')"><i data-lucide="file-text" width="12" height="12"></i><span data-i18n="chip.passport">护照</span></span>
+          <span class="hint-chip" onclick="qs('证件')"><i data-lucide="credit-card" width="12" height="12"></i><span data-i18n="chip.id">证件</span></span>
+          <span class="hint-chip" onclick="qs('药')"><i data-lucide="pill" width="12" height="12"></i><span data-i18n="chip.medicine">药品</span></span>
+          <span class="hint-chip" onclick="qs('工具')"><i data-lucide="wrench" width="12" height="12"></i><span data-i18n="chip.tools">工具</span></span>
+          <span class="hint-chip" onclick="qs('电子')"><i data-lucide="cpu" width="12" height="12"></i><span data-i18n="chip.electronics">电子</span></span>
+          <span class="hint-chip" onclick="qs('合同')"><i data-lucide="file-signature" width="12" height="12"></i><span data-i18n="chip.contracts">合同</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Alert Banner -->
+    <div class="alert-banner hidden" id="alertBanner">
+      <span class="alert-banner-icon"><i data-lucide="alert-triangle" width="18" height="18"></i></span>
+      <div class="alert-banner-body">
+        <div class="alert-banner-title" id="alertTitle">⚠️ 有物品即将到期或已过期</div>
+        <ul class="alert-banner-list" id="alertList"></ul>
+      </div>
+    </div>
+
+    <!-- 过期置顶专区 -->
+    <div class="expired-section hidden" id="expiredSection">
+      <div class="expired-hd">
+        <div class="expired-hd-icon">
+          <i data-lucide="alert-octagon" width="18" height="18"></i>
+        </div>
+        <span class="expired-hd-title" id="expiredTitle">⏱️ 过期 / 到期提醒</span>
+        <span class="expired-hd-count" id="expiredCount">0</span>
+      </div>
+      <div class="expired-list" id="expiredList"></div>
+    </div>
+
+    <!-- Search Panel -->
+    <div class="search-panel" id="searchPanel">
+      <div class="search-hd">
+        <h2 class="section-title">
+          <span class="section-title-icon"><i data-lucide="search" width="14" height="14"></i></span>
+          <span data-i18n="searchResult">搜索结果</span>
+        </h2>
+        <span class="search-count" id="searchCount">找到 <strong>0</strong> 项</span>
+      </div>
+      <div class="items-grid" id="searchGrid"></div>
+    </div>
+
+    <!-- Main View -->
+    <div id="mainView">
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-ic green"><i data-lucide="package" width="18" height="18"></i></div>
+          <div class="stat-val" id="s-total">0</div>
+          <div class="stat-lbl" data-i18n="stat.total">物品总数</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-ic orange"><i data-lucide="home" width="18" height="18"></i></div>
+          <div class="stat-val" id="s-rooms">0</div>
+          <div class="stat-lbl" data-i18n="stat.rooms">已用房间</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-ic purple"><i data-lucide="tag" width="18" height="18"></i></div>
+          <div class="stat-val" id="s-tags">0</div>
+          <div class="stat-lbl" data-i18n="stat.types">标签种类</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-ic red"><i data-lucide="alert-circle" width="18" height="18"></i></div>
+          <div class="stat-val" id="s-alerts">0</div>
+          <div class="stat-lbl" data-i18n="stat.alerts">待提醒</div>
+        </div>
+      </div>
+
+      <!-- Recently Added -->
+      <section class="section" id="secRecent">
+        <div class="section-hd">
+          <h2 class="section-title">
+            <span class="section-title-icon"><i data-lucide="clock" width="14" height="14"></i></span>
+            <span data-i18n="recent">最近录入</span>
+          </h2>
+          <a class="section-link" href="#"><span data-i18n="viewAll">查看全部</span> <i data-lucide="chevron-right" width="14" height="14"></i></a>
+        </div>
+        <div class="items-grid" id="gridRecent"></div>
+      </section>
+
+      <!-- Room Browse -->
+      <section class="section" id="secRoom">
+        <div class="section-hd">
+          <h2 class="section-title" id="roomSectionTitle">
+            <span class="section-title-icon"><i data-lucide="layout-grid" width="14" height="14"></i></span>
+            <span data-i18n="allItems">全部物品</span>
+          </h2>
+        </div>
+        <div class="items-grid" id="gridRoom"></div>
+      </section>
+
+      <!-- Empty -->
+      <div class="empty hidden" id="emptyState">
+        <div class="empty-icon"><i data-lucide="inbox" width="38" height="38"></i></div>
+        <h3 id="emptyTitle">还没有任何物品</h3>
+        <p id="emptyDesc">点击下方按钮，添加你的第一件物品，再也不用翻箱倒柜！</p>
+        <button class="btn btn-primary btn-lg" onclick="openAddModal()">
+          <i data-lucide="plus" width="18" height="18"></i>
+          <span data-i18n="addFirst">添加第一个物品</span>
         </button>
       </div>
     </div>
-  </header>
 
-  <div class="main-layout">
-    <!-- 侧边栏 -->
-    <aside class="sidebar">
-      <div class="sidebar-title">房间分类</div>
-      <ul class="room-list" id="roomList">
-        <li class="room-item active" data-room="全部" onclick="filterByRoom('全部')">
-          <span class="room-emoji">🏠</span>
-          <span class="room-name">全部</span>
-          <span class="room-count" id="count-all">0</span>
-        </li>
-        <li class="room-item" data-room="客厅" onclick="filterByRoom('客厅')">
-          <span class="room-emoji">🛋️</span>
-          <span class="room-name">客厅</span>
-          <span class="room-count" id="count-客厅">0</span>
-        </li>
-        <li class="room-item" data-room="卧室" onclick="filterByRoom('卧室')">
-          <span class="room-emoji">🛏️</span>
-          <span class="room-name">卧室</span>
-          <span class="room-count" id="count-卧室">0</span>
-        </li>
-        <li class="room-item" data-room="厨房" onclick="filterByRoom('厨房')">
-          <span class="room-emoji">🍳</span>
-          <span class="room-name">厨房</span>
-          <span class="room-count" id="count-厨房">0</span>
-        </li>
-        <li class="room-item" data-room="书房" onclick="filterByRoom('书房')">
-          <span class="room-emoji">📚</span>
-          <span class="room-name">书房</span>
-          <span class="room-count" id="count-书房">0</span>
-        </li>
-        <li class="room-item" data-room="洗手间" onclick="filterByRoom('洗手间')">
-          <span class="room-emoji">🚿</span>
-          <span class="room-name">洗手间</span>
-          <span class="room-count" id="count-洗手间">0</span>
-        </li>
-        <li class="room-item" data-room="阳台" onclick="filterByRoom('阳台')">
-          <span class="room-emoji">🌿</span>
-          <span class="room-name">阳台</span>
-          <span class="room-count" id="count-阳台">0</span>
-        </li>
-        <li class="room-item" data-room="车库/储物" onclick="filterByRoom('车库/储物')">
-          <span class="room-emoji">🚗</span>
-          <span class="room-name">车库/储物</span>
-          <span class="room-count" id="count-车库/储物">0</span>
-        </li>
-      </ul>
+  </main>
+</div>
 
-      <div class="sidebar-divider"></div>
-      <div class="sidebar-title">快捷操作</div>
-      <ul class="room-list">
-        <li class="room-item" onclick="openAddModal()">
-          <span class="room-emoji">➕</span>
-          <span class="room-name">添加新物品</span>
-        </li>
-        <li class="room-item" onclick="showBulkImport()">
-          <span class="room-emoji">📷</span>
-          <span class="room-name">批量拍照录入</span>
-        </li>
-      </ul>
-    </aside>
-
-    <!-- 主内容 -->
-    <main class="content">
-      <!-- 搜索区域 -->
-      <section class="hero-search">
-        <div class="hero-content">
-          <div class="hero-emoji">🔍</div>
-          <h1 class="hero-title">家里有什么，一搜就知道</h1>
-          <p class="hero-subtitle">拍照录入、自然语言搜索、再不用翻箱倒柜</p>
-
-          <div class="search-box">
-            <div class="search-input-wrap">
-              <span class="search-icon">🔍</span>
-              <input
-                type="text"
-                class="search-input"
-                id="mainSearch"
-                placeholder="搜一下，比如：护照、医保卡、工具箱..."
-                autocomplete="off"
-                oninput="handleSearch(this.value)"
-              >
-              <button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button>
-            </div>
-            <div class="search-hints">
-              <span class="search-hint" onclick="quickSearch('护照')">📘 护照</span>
-              <span class="search-hint" onclick="quickSearch('证件')">📄 证件</span>
-              <span class="search-hint" onclick="quickSearch('药')">💊 药品</span>
-              <span class="search-hint" onclick="quickSearch('工具')">🔧 工具</span>
-              <span class="search-hint" onclick="quickSearch('合同')">📋 合同</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 搜索结果区域 -->
-      <section class="search-results" id="searchResults">
-        <div class="search-results-header">
-          <h2 class="section-title">
-            <span class="emoji">🔍</span>
-            <span>搜索结果</span>
-          </h2>
-          <span class="search-results-count" id="searchCount">找到 <strong>0</strong> 个物品</span>
-        </div>
-        <div class="items-grid" id="searchResultsGrid"></div>
-      </section>
-
-      <!-- 主内容区域 -->
-      <div id="mainContent">
-        <!-- 统计卡片 -->
-        <div class="stats-row">
-          <div class="stat-card">
-            <div class="stat-icon primary">📦</div>
-            <div class="stat-value" id="statTotal">0</div>
-            <div class="stat-label">物品总数</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-icon secondary">🏠</div>
-            <div class="stat-value" id="statRooms">0</div>
-            <div class="stat-label">已用房间</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-icon accent">🏷️</div>
-            <div class="stat-value" id="statTags">0</div>
-            <div class="stat-label">标签种类</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-icon info">📅</div>
-            <div class="stat-value" id="statRecent">0</div>
-            <div class="stat-label">本周新增</div>
-          </div>
-        </div>
-
-        <!-- 最近录入 -->
-        <section class="section" id="recentSection">
-          <div class="section-header">
-            <h2 class="section-title">
-              <span class="emoji">🕐</span>
-              最近录入
-            </h2>
-            <a href="#" class="section-more">查看全部 →</a>
-          </div>
-          <div class="items-grid" id="recentItems"></div>
-        </section>
-
-        <!-- 按房间浏览 -->
-        <section class="section" id="roomsSection">
-          <div class="section-header">
-            <h2 class="section-title">
-              <span class="emoji">🏠</span>
-              按房间浏览
-            </h2>
-          </div>
-          <div class="items-grid" id="roomItems"></div>
-        </section>
-
-        <!-- 空状态 -->
-        <div class="empty-state" id="emptyState" style="display: none;">
-          <div class="empty-state-icon">📦</div>
-          <h3 class="empty-state-title">还没有任何物品</h3>
-          <p class="empty-state-text">点击上方「添加物品」按钮，拍照录入你的第一件物品吧！</p>
-          <button class="btn btn-primary btn-lg" onclick="openAddModal()">
-            <span>➕</span>
-            <span>添加第一个物品</span>
-          </button>
-        </div>
-      </div>
-    </main>
+<!-- Bottom Nav -->
+<nav class="bottom-nav" id="bottomNav">
+  <div class="bn-item active" data-bn="home" onclick="bnSwitch('home')">
+    <i data-lucide="home" width="20" height="20"></i>
+    <span data-i18n="nav.home">首页</span>
   </div>
+  <div class="bn-item" data-bn="search" onclick="bnSwitch('search')">
+    <i data-lucide="search" width="20" height="20"></i>
+    <span data-i18n="nav.search">搜索</span>
+  </div>
+  <div class="bn-item" data-bn="rooms" onclick="bnSwitch('rooms')">
+    <i data-lucide="layout-grid" width="20" height="20"></i>
+    <span data-i18n="nav.rooms">房间</span>
+  </div>
+  <div class="bn-item" data-bn="alerts" onclick="bnSwitch('alerts')">
+    <i data-lucide="bell" width="20" height="20"></i>
+    <span data-i18n="nav.alerts">提醒</span>
+  </div>
+</nav>
 
-  <!-- 添加物品模态框 -->
-  <div class="modal-overlay" id="addModal">
-    <div class="modal">
-      <div class="modal-header">
-        <h3 class="modal-title">添加物品</h3>
-        <button class="modal-close" onclick="closeAddModal()">✕</button>
+<!-- FAB -->
+<button class="fab" onclick="openAddModal()">
+  <i data-lucide="plus" width="24" height="24"></i>
+</button>
+
+<!-- ===== ADD MODAL ===== -->
+<div class="overlay" id="addOverlay">
+  <div class="modal">
+    <div class="modal-hd">
+      <h3 class="modal-title" id="addModalTitle">添加物品</h3>
+      <button class="modal-close" onclick="closeAdd()"><i data-lucide="x" width="16" height="16"></i></button>
+    </div>
+    <div class="modal-body">
+
+      <!-- Photo -->
+      <div class="photo-zone" id="pzone" onclick="document.getElementById('pInput').click()">
+        <div class="photo-zone-icon"><i data-lucide="camera" width="22" height="22"></i></div>
+        <div class="photo-zone-text" id="photoZoneText">点击上传照片</div>
+        <div class="photo-zone-hint">JPG / PNG，正方形最佳</div>
       </div>
-      <div class="modal-body">
-        <!-- 照片上传 -->
-        <div class="photo-upload" id="photoUpload" onclick="document.getElementById('photoInput').click()">
-          <div class="photo-upload-icon">📷</div>
-          <div class="photo-upload-text">点击上传照片</div>
-          <div class="photo-upload-hint">支持 JPG、PNG，建议正方形</div>
+      <input type="file" id="pInput" accept="image/*" style="display:none" onchange="onPhoto(this)">
+
+      <div class="form-group">
+        <label class="form-label"><i data-lucide="tag" width="13" height="13"></i><span data-i18n="form.name">物品名称</span> *</label>
+        <input class="form-input" id="f-name" type="text" placeholder="比如：中国护照、螺丝刀套装">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label"><i data-lucide="map-pin" width="13" height="13"></i><span data-i18n="form.room">放置房间</span> *</label>
+        <div class="room-picker" id="roomPicker">
+          <div class="room-chip" data-room="客厅" onclick="pickRoom(this)">
+            <div class="rc-icon"><i data-lucide="sofa" width="14" height="14"></i></div>
+            <div class="rc-name">客厅</div>
+          </div>
+          <div class="room-chip" data-room="卧室" onclick="pickRoom(this)">
+            <div class="rc-icon"><i data-lucide="bed-double" width="14" height="14"></i></div>
+            <div class="rc-name">卧室</div>
+          </div>
+          <div class="room-chip" data-room="厨房" onclick="pickRoom(this)">
+            <div class="rc-icon"><i data-lucide="utensils" width="14" height="14"></i></div>
+            <div class="rc-name">厨房</div>
+          </div>
+          <div class="room-chip" data-room="书房" onclick="pickRoom(this)">
+            <div class="rc-icon"><i data-lucide="book-open" width="14" height="14"></i></div>
+            <div class="rc-name">书房</div>
+          </div>
+          <div class="room-chip" data-room="洗手间" onclick="pickRoom(this)">
+            <div class="rc-icon"><i data-lucide="shower-head" width="14" height="14"></i></div>
+            <div class="rc-name">洗手间</div>
+          </div>
+          <div class="room-chip" data-room="阳台" onclick="pickRoom(this)">
+            <div class="rc-icon"><i data-lucide="trees" width="14" height="14"></i></div>
+            <div class="rc-name">阳台</div>
+          </div>
+          <div class="room-chip" data-room="储物间" onclick="pickRoom(this)">
+            <div class="rc-icon"><i data-lucide="archive" width="14" height="14"></i></div>
+            <div class="rc-name">储物间</div>
+          </div>
+          <div class="room-chip" data-room="其他" onclick="pickRoom(this)">
+            <div class="rc-icon"><i data-lucide="more-horizontal" width="14" height="14"></i></div>
+            <div class="rc-name">其他</div>
+          </div>
         </div>
-        <input type="file" id="photoInput" accept="image/*" style="display: none;" onchange="handlePhotoSelect(this)">
-
-        <!-- 表单 -->
-        <form id="addForm">
-          <div class="form-group">
-            <label class="form-label">物品名称 *</label>
-            <input type="text" class="form-input" id="itemName" placeholder="比如：护照、医保卡、螺丝刀套装" required>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label">放置房间 *</label>
-              <select class="form-input" id="itemRoom" required>
-                <option value="">选择房间</option>
-                <option value="客厅">🛋️ 客厅</option>
-                <option value="卧室">🛏️ 卧室</option>
-                <option value="厨房">🍳 厨房</option>
-                <option value="书房">📚 书房</option>
-                <option value="洗手间">🚿 洗手间</option>
-                <option value="阳台">🌿 阳台</option>
-                <option value="车库/储物">🚗 车库/储物</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="form-label">收纳位置</label>
-              <input type="text" class="form-input" id="itemContainer" placeholder="比如：床头柜第二层">
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">详细描述</label>
-            <input type="text" class="form-input" id="itemDescription" placeholder="补充一些特征，方便识别">
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">标签（可多选）</label>
-            <div class="tag-selector" id="tagSelector">
-              <span class="tag-option" data-tag="证件" onclick="toggleTag(this)">📄 证件</span>
-              <span class="tag-option" data-tag="重要文件" onclick="toggleTag(this)">📋 文件</span>
-              <span class="tag-option" data-tag="电子产品" onclick="toggleTag(this)">📱 电子</span>
-              <span class="tag-option" data-tag="工具" onclick="toggleTag(this)">🔧 工具</span>
-              <span class="tag-option" data-tag="药品" onclick="toggleTag(this)">💊 药品</span>
-              <span class="tag-option" data-tag="衣物" onclick="toggleTag(this)">👕 衣物</span>
-              <span class="tag-option" data-tag="书籍" onclick="toggleTag(this)">📚 书籍</span>
-              <span class="tag-option" data-tag="食品" onclick="toggleTag(this)">🍎 食品</span>
-              <span class="tag-option" data-tag="首饰" onclick="toggleTag(this)">💍 首饰</span>
-              <span class="tag-option" data-tag="收藏品" onclick="toggleTag(this)">🏺 收藏</span>
-            </div>
-          </div>
-        </form>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" onclick="closeAddModal()">取消</button>
-        <button type="button" class="btn btn-primary" onclick="submitItem()">保存物品</button>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label"><i data-lucide="archive" width="13" height="13"></i><span data-i18n="form.location">收纳位置</span></label>
+          <input class="form-input" id="f-container" type="text" placeholder="如：床头柜第二层">
+        </div>
+        <div class="form-group">
+          <label class="form-label"><i data-lucide="hash" width="13" height="13"></i><span data-i18n="form.qty">数量</span></label>
+          <div class="qty-ctrl">
+            <button class="qty-btn" onclick="changeQty(-1)"><i data-lucide="minus" width="14" height="14"></i></button>
+            <input class="qty-val" id="f-qty" type="number" value="1" min="1">
+            <button class="qty-btn" onclick="changeQty(1)"><i data-lucide="plus" width="14" height="14"></i></button>
+          </div>
+        </div>
       </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label"><i data-lucide="calendar" width="13" height="13"></i><span data-i18n="form.expire">到期日期</span></label>
+          <input class="form-input" id="f-expire" type="date">
+          <div class="form-hint" data-i18n="form.expireHint">留空表示无到期日</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label"><i data-lucide="alert-circle" width="13" height="13"></i><span data-i18n="form.minQty">库存预警值</span></label>
+          <input class="form-input" id="f-minqty" type="number" placeholder="0=不提醒" value="0" min="0">
+          <div class="form-hint" data-i18n="form.minQtyHint">数量≤此值时提醒</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label"><i data-lucide="align-left" width="13" height="13"></i><span data-i18n="form.desc">描述备注</span></label>
+        <input class="form-input" id="f-desc" type="text" placeholder="补充特征，方便识别">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label"><i data-lucide="layers" width="13" height="13"></i><span data-i18n="form.types">物品类型</span>（<span data-i18n="form.multiSelect">可多选</span>）</label>
+        <div class="tag-picker" id="tagPicker">
+          <span class="tag-chip" data-tag="证件" onclick="toggleTag(this)"><i data-lucide="credit-card" width="12" height="12"></i>证件</span>
+          <span class="tag-chip" data-tag="重要文件" onclick="toggleTag(this)"><i data-lucide="file-text" width="12" height="12"></i>重要文件</span>
+          <span class="tag-chip" data-tag="电子产品" onclick="toggleTag(this)"><i data-lucide="cpu" width="12" height="12"></i>电子</span>
+          <span class="tag-chip" data-tag="工具" onclick="toggleTag(this)"><i data-lucide="wrench" width="12" height="12"></i>工具</span>
+          <span class="tag-chip" data-tag="药品" onclick="toggleTag(this)"><i data-lucide="pill" width="12" height="12"></i>药品</span>
+          <span class="tag-chip" data-tag="衣物" onclick="toggleTag(this)"><i data-lucide="shirt" width="12" height="12"></i>衣物</span>
+          <span class="tag-chip" data-tag="书籍" onclick="toggleTag(this)"><i data-lucide="book" width="12" height="12"></i>书籍</span>
+          <span class="tag-chip" data-tag="食品" onclick="toggleTag(this)"><i data-lucide="apple" width="12" height="12"></i>食品</span>
+          <span class="tag-chip" data-tag="首饰" onclick="toggleTag(this)"><i data-lucide="gem" width="12" height="12"></i>首饰</span>
+          <span class="tag-chip" data-tag="收藏品" onclick="toggleTag(this)"><i data-lucide="star" width="12" height="12"></i>收藏</span>
+          <span class="tag-chip" data-tag="家居" onclick="toggleTag(this)"><i data-lucide="lamp" width="12" height="12"></i>家居</span>
+          <span class="tag-chip" data-tag="运动健身" onclick="toggleTag(this)"><i data-lucide="dumbbell" width="12" height="12"></i>运动</span>
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-secondary" onclick="closeAdd()"><span data-i18n="cancel">取消</span></button>
+      <button class="btn btn-primary" onclick="submitItem()">
+        <i data-lucide="check" width="15" height="15"></i>
+        <span data-i18n="save">保存物品</span>
+      </button>
     </div>
   </div>
+</div>
 
-  <!-- 详情模态框 -->
-  <div class="modal-overlay detail-modal" id="detailModal" onclick="if(event.target === this) closeDetailModal()">
-    <div class="modal">
-      <div class="modal-header">
-        <h3 class="modal-title">物品详情</h3>
-        <button class="modal-close" onclick="closeDetailModal()">✕</button>
-      </div>
-      <div class="modal-body" id="detailContent" style="padding: 0;">
-        <!-- 动态内容 -->
-      </div>
+<!-- Detail Modal -->
+<div class="overlay" id="detailOverlay">
+  <div class="modal modal-lg">
+    <div class="modal-hd">
+      <h3 class="modal-title" data-i18n="detailTitle">物品详情</h3>
+      <button class="modal-close" onclick="closeDetail()"><i data-lucide="x" width="16" height="16"></i></button>
     </div>
+    <div class="modal-body" id="detailBody" style="padding:0;"></div>
   </div>
+</div>
 
-  <!-- Toast -->
-  <div class="toast" id="toast"></div>
+<!-- Toast -->
+<div class="toast" id="toast"></div>
 
-  <script>
-    // ========================================
-    // 数据存储（本地 LocalStorage）
-    // ========================================
-    const STORAGE_KEY = 'whatishome_items';
+<script>
+// ===================================================
+// TYPE ICONS
+// ===================================================
+const TYPE_ICONS = {
+  '证件':     { icon: 'credit-card',   bg: '#DBEAFE', color: '#2563EB' },
+  '重要文件': { icon: 'file-text',     bg: '#EDE9FE', color: '#7C3AED' },
+  '电子产品': { icon: 'cpu',           bg: '#CCFBF1', color: '#0D9488' },
+  '工具':     { icon: 'wrench',        bg: '#FEF3C7', color: '#D97706' },
+  '药品':     { icon: 'pill',          bg: '#FCE7F3', color: '#BE185D' },
+  '衣物':     { icon: 'shirt',         bg: '#F0FDF4', color: '#16A34A' },
+  '书籍':     { icon: 'book',          bg: '#FFF7ED', color: '#C2410C' },
+  '食品':     { icon: 'apple',         bg: '#F0FDF4', color: '#15803D' },
+  '首饰':     { icon: 'gem',           bg: '#FDF4FF', color: '#9333EA' },
+  '收藏品':   { icon: 'star',          bg: '#FFFBEB', color: '#B45309' },
+  '家居':     { icon: 'lamp',          bg: '#ECFDF5', color: '#059669' },
+  '运动健身': { icon: 'dumbbell',      bg: '#EFF6FF', color: '#3B82F6' },
+  '_default': { icon: 'package',       bg: '#F3F4F6', color: '#6B7280' },
+};
 
-    function loadItems() {
-      const data = localStorage.getItem(STORAGE_KEY);
-      return data ? JSON.parse(data) : [];
-    }
+function getTypeIcon(tags) {
+  if (!tags || tags.length === 0) return TYPE_ICONS['_default'];
+  for (const t of tags) {
+    if (TYPE_ICONS[t]) return TYPE_ICONS[t];
+  }
+  return TYPE_ICONS['_default'];
+}
 
-    function saveItems(items) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-    }
+// ===================================================
+// I18N
+// ===================================================
+const I18N = {
+  zh: {
+    appName: '家里有什么',
+    heroTitle: '家里有什么，一搜就知道',
+    heroSub: '拍照录入 · 分类管理 · 到期提醒 · 库存预警',
+    heroPlaceholder: '搜索物品名称、位置、标签…',
+    rooms: '房间',
+    actions: '操作',
+    allItems: '全部物品',
+    addItem: '添加物品',
+    exportData: '导出数据',
+    recent: '最近录入',
+    viewAll: '查看全部',
+    searchResult: '搜索结果',
+    statTotal: '物品总数', statRooms: '已用房间', statTypes: '标签种类', statAlerts: '待提醒',
+    navHome: '首页', navSearch: '搜索', navRooms: '房间', navAlerts: '提醒',
+    addModalTitle: '添加物品',
+    photoZoneText: '点击上传照片',
+    formName: '物品名称', formRoom: '放置房间', formLocation: '收纳位置',
+    formQty: '数量', formExpire: '到期日期', formExpireHint: '留空表示无到期日',
+    formMinQty: '库存预警值', formMinQtyHint: '数量≤此值时提醒',
+    formDesc: '描述备注', formTypes: '物品类型', formMultiSelect: '可多选',
+    cancel: '取消', save: '保存物品',
+    detailTitle: '物品详情',
+    copiedLoc: '位置已复制', addedOk: '已添加', deletedOk: '已删除',
+    noName: '请输入物品名称', noRoom: '请选择放置房间',
+    emptyTitle: '还没有任何物品', emptyDesc: '点击下方按钮，添加你的第一件物品，再也不用翻箱倒柜！',
+    addFirst: '添加第一个物品',
+    alertTitle: '⚠️ 有物品即将到期或已过期',
+    expiredTitle: '⏱️ 过期 / 到期提醒',
+    expiredOverdue: '已过期', expiredSoon: '天后到期',
+    chipPassport: '护照', chipId: '证件', chipMedicine: '药品',
+    chipTools: '工具', chipElectronics: '电子', chipContracts: '合同',
+    qtyUnit: '件', copiedPosition: '复制位置',
+    lowStock: '库存不足', detailCopy: '复制位置', detailEdit: '编辑', detailDelete: '删除',
+    ok: '有效期至', daysLeft: '天',
+    noResultTitle: '没有找到', noResultDesc: '换个关键词试试，或把这个物品加进来', addThis: '添加',
+    findCount: '找到', items: '项',
+    recentlyAdded: '最近录入',
+  },
+  en: {
+    appName: 'What Do I Have at Home',
+    heroTitle: 'Find Anything in Your Home Instantly',
+    heroSub: 'Photo · Categories · Expiry Alerts · Stock Tracking',
+    heroPlaceholder: 'Search by name, location, or tag…',
+    rooms: 'Rooms',
+    actions: 'Actions',
+    allItems: 'All Items',
+    addItem: 'Add Item',
+    exportData: 'Export Data',
+    recent: 'Recently Added',
+    viewAll: 'View All',
+    searchResult: 'Search Results',
+    statTotal: 'Total Items', statRooms: 'Rooms Used', statTypes: 'Categories', statAlerts: 'Alerts',
+    navHome: 'Home', navSearch: 'Search', navRooms: 'Rooms', navAlerts: 'Alerts',
+    addModalTitle: 'Add Item',
+    photoZoneText: 'Tap to upload photo',
+    formName: 'Item Name', formRoom: 'Room', formLocation: 'Exact Location',
+    formQty: 'Quantity', formExpire: 'Expiry Date', formExpireHint: 'Leave blank if none',
+    formMinQty: 'Low Stock Alert', formMinQtyHint: 'Alert when qty ≤ this',
+    formDesc: 'Notes / Description', formTypes: 'Item Type', formMultiSelect: 'multi-select',
+    cancel: 'Cancel', save: 'Save Item',
+    detailTitle: 'Item Details',
+    copiedLoc: 'Location copied', addedOk: 'Added', deletedOk: 'Deleted',
+    noName: 'Please enter item name', noRoom: 'Please select a room',
+    emptyTitle: 'No items yet', emptyDesc: 'Tap the button below to add your first item!',
+    addFirst: 'Add First Item',
+    alertTitle: '⚠️ Items expiring or expired',
+    expiredTitle: '⏱️ Expiry / Alert Reminders',
+    expiredOverdue: 'Expired', expiredSoon: 'days left',
+    chipPassport: 'Passport', chipId: 'ID', chipMedicine: 'Medicine',
+    chipTools: 'Tools', chipElectronics: 'Electronics', chipContracts: 'Contracts',
+    qtyUnit: 'pc', copiedPosition: 'Copy location',
+    lowStock: 'Low stock', detailCopy: 'Copy Loc', detailEdit: 'Edit', detailDelete: 'Delete',
+    ok: 'Valid until', daysLeft: 'days',
+    noResultTitle: 'No results for', noResultDesc: 'Try a different keyword or add this item.', addThis: 'Add',
+    findCount: 'Found', items: 'results',
+    recentlyAdded: 'Recently Added',
+  }
+};
 
-    // 示例数据
-    const sampleItems = [
-      {
-        id: '1',
-        name: '中国护照',
-        description: '2025年到期，红色封面',
-        photo: '',
-        room: '书房',
-        container: '书架第二层抽屉',
-        tags: ['证件', '重要文件'],
-        createdAt: new Date(Date.now() - 86400000).toISOString(),
-        updatedAt: new Date(Date.now() - 86400000).toISOString()
-      },
-      {
-        id: '2',
-        name: '电动螺丝刀套装',
-        description: '米家电动螺丝刀，附送批头套装',
-        photo: '',
-        room: '书房',
-        container: '工具箱',
-        tags: ['工具'],
-        createdAt: new Date(Date.now() - 172800000).toISOString(),
-        updatedAt: new Date(Date.now() - 172800000).toISOString()
-      },
-      {
-        id: '3',
-        name: '家庭医药箱',
-        description: '创可贴、感冒药、退烧药、酒精棉球',
-        photo: '',
-        room: '客厅',
-        container: '电视柜第一层',
-        tags: ['药品'],
-        createdAt: new Date(Date.now() - 259200000).toISOString(),
-        updatedAt: new Date(Date.now() - 259200000).toISOString()
-      },
-      {
-        id: '4',
-        name: '房产证',
-        description: '商品房房产证，放在文件袋里',
-        photo: '',
-        room: '书房',
-        container: '保险柜',
-        tags: ['重要文件'],
-        createdAt: new Date(Date.now() - 345600000).toISOString(),
-        updatedAt: new Date(Date.now() - 345600000).toISOString()
-      },
-      {
-        id: '5',
-        name: 'Apple AirPods Pro',
-        description: '第二代，带充电盒',
-        photo: '',
-        room: '卧室',
-        container: '床头柜',
-        tags: ['电子产品'],
-        createdAt: new Date(Date.now() - 432000000).toISOString(),
-        updatedAt: new Date(Date.now() - 432000000).toISOString()
-      },
-      {
-        id: '6',
-        name: '结婚证',
-        description: '2019年登记',
-        photo: '',
-        room: '书房',
-        container: '书架第二层抽屉',
-        tags: ['证件', '重要文件'],
-        createdAt: new Date(Date.now() - 518400000).toISOString(),
-        updatedAt: new Date(Date.now() - 518400000).toISOString()
-      }
-    ];
+let curLang = localStorage.getItem('lang') || 'zh';
 
-    // 初始化：如果没有数据，添加示例
-    let items = loadItems();
-    if (items.length === 0) {
-      items = sampleItems;
-      saveItems(items);
-    }
+function applyI18N(lang) {
+  const t = I18N[lang] || I18N.zh;
+  document.getElementById('appName').textContent = t.appName;
+  document.getElementById('heroTitle').textContent = t.heroTitle;
+  document.getElementById('heroSub').textContent = t.heroSub;
+  document.getElementById('heroSearch').placeholder = t.heroPlaceholder;
+  document.getElementById('addBtnText').textContent = t.addItem;
+  document.getElementById('addModalTitle').textContent = t.addModalTitle;
+  document.getElementById('photoZoneText').textContent = t.photoZoneText;
+  document.getElementById('emptyTitle').textContent = t.emptyTitle;
+  document.getElementById('emptyDesc').textContent = t.emptyDesc;
+  document.getElementById('alertTitle').textContent = t.alertTitle;
+  document.getElementById('expiredTitle').textContent = t.expiredTitle;
 
-    // ========================================
-    // 状态
-    // ========================================
-    let currentRoom = '全部';
-    let currentPhoto = '';
-    let selectedTags = [];
-    let searchTimeout = null;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if (t[key]) el.textContent = t[key];
+  });
 
-    // ========================================
-    // 渲染函数
-    // ========================================
-    function renderItems() {
-      const allItems = loadItems();
-      const roomItems = currentRoom === '全部'
-        ? allItems
-        : allItems.filter(item => item.room === currentRoom);
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.lang === lang);
+  });
 
-      const recentItems = [...allItems]
-        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-        .slice(0, 6);
+  document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+  document.documentElement.setAttribute('data-lang', lang);
+}
 
-      // 更新统计
-      updateStats(allItems);
+function setLang(lang) {
+  curLang = lang;
+  localStorage.setItem('lang', lang);
+  applyI18N(lang);
+  render();
+}
 
-      // 渲染最近录入
-      renderGrid('recentItems', recentItems);
+// ===================================================
+// DATA
+// ===================================================
+const KEY = 'whatishome_v3';
+function load() { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch { return []; } }
+function save(arr) { localStorage.setItem(KEY, JSON.stringify(arr)); }
 
-      // 渲染房间物品
-      renderGrid('roomItems', roomItems.slice(0, 8));
+const SAMPLE = [
+  { id:'s1', name:'中国护照',        desc:'2027年到期，红色封面', photo:'', room:'书房',  container:'书架抽屉',   tags:['证件'],     qty:1, minQty:0, expireDate:'2027-08-15', createdAt: d(-1)  },
+  { id:'s2', name:'电动螺丝刀套装',  desc:'米家，附送批头套装',   photo:'', room:'储物间', container:'工具箱',    tags:['工具'],     qty:1, minQty:0, expireDate:'',           createdAt: d(-2)  },
+  { id:'s3', name:'家庭急救药箱',    desc:'含创可贴、退烧药等',   photo:'', room:'客厅',   container:'电视柜',    tags:['药品'],     qty:1, minQty:0, expireDate:'2025-06-01', createdAt: d(-3)  },
+  { id:'s4', name:'房产证',          desc:'商品房房产证',          photo:'', room:'书房',   container:'保险柜',    tags:['重要文件'], qty:1, minQty:0, expireDate:'',           createdAt: d(-5)  },
+  { id:'s5', name:'AirPods Pro',     desc:'第二代，白色',          photo:'', room:'卧室',   container:'床头柜',    tags:['电子产品'], qty:1, minQty:0, expireDate:'',           createdAt: d(-6)  },
+  { id:'s6', name:'结婚证',          desc:'2019年登记',            photo:'', room:'书房',   container:'书架抽屉',  tags:['证件'],     qty:1, minQty:0, expireDate:'',           createdAt: d(-8)  },
+  { id:'s7', name:'维生素C',         desc:'补充免疫力',            photo:'', room:'厨房',   container:'冰箱旁',    tags:['药品','食品'], qty:3, minQty:1, expireDate:'2025-12-31', createdAt: d(-10) },
+  { id:'s8', name:'瑜伽垫',          desc:'TPE材质，加厚款',       photo:'', room:'阳台',   container:'',          tags:['运动健身'], qty:1, minQty:0, expireDate:'',           createdAt: d(-12) },
+];
 
-      // 更新房间计数
-      updateRoomCounts(allItems);
+function d(days) { return new Date(Date.now() + days*86400000).toISOString(); }
 
-      // 显示/隐藏空状态
-      const emptyState = document.getElementById('emptyState');
-      const recentSection = document.getElementById('recentSection');
-      const roomsSection = document.getElementById('roomsSection');
+let items = load();
+if (!items.length) { items = SAMPLE; save(items); }
 
-      if (allItems.length === 0) {
-        emptyState.style.display = 'block';
-        recentSection.style.display = 'none';
-        roomsSection.style.display = 'none';
-      } else {
-        emptyState.style.display = 'none';
-        recentSection.style.display = 'block';
-        roomsSection.style.display = 'block';
-      }
-    }
+// ===================================================
+// STATE
+// ===================================================
+let curRoom = '全部';
+let curPhoto = '';
+let selTags = [];
+let selRoom = '';
+let searchTimer = null;
 
-    function renderGrid(containerId, items) {
-      const container = document.getElementById(containerId);
-      if (!container) return;
+// ===================================================
+// RENDER
+// ===================================================
+function render() {
+  const all = load();
+  const recent = [...all].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).slice(0,8);
+  const roomItems = curRoom==='全部' ? all : all.filter(i=>i.room===curRoom);
 
-      if (items.length === 0) {
-        container.innerHTML = '<p style="color: var(--color-text-tertiary); grid-column: 1/-1; text-align: center; padding: 40px;">暂无物品</p>';
-        return;
-      }
+  renderStats(all);
+  renderCounts(all);
+  renderExpiredSection(all);
+  renderGrid('gridRecent', recent);
+  renderGrid('gridRoom', roomItems);
+  updateRoomTitle();
+  checkAlerts(all);
+  checkEmpty(all);
 
-      container.innerHTML = items.map(item => `
-        <div class="item-card animate-fadeIn" onclick="openDetail('${item.id}')">
-          <div class="item-photo">
-            ${item.photo
-              ? `<img src="${item.photo}" alt="${item.name}">`
-              : '<span class="item-photo-placeholder">📦</span>'
-            }
-            ${item.tags.length > 0 ? `
-              <div class="item-tags">
-                ${item.tags.slice(0, 2).map(tag => `<span class="item-tag">${tag}</span>`).join('')}
-              </div>
-            ` : ''}
-          </div>
-          <div class="item-info">
-            <div class="item-name">${item.name}</div>
-            <div class="item-location">
-              <span>📍</span>
-              <span class="room">${item.room}</span>
-              ${item.container ? ` › ${item.container}` : ''}
-            </div>
-          </div>
+  const secRecent = document.getElementById('secRecent');
+  const secRoom = document.getElementById('secRoom');
+  if (all.length === 0) {
+    secRecent.classList.add('hidden');
+    secRoom.classList.add('hidden');
+  } else {
+    secRecent.classList.remove('hidden');
+    secRoom.classList.remove('hidden');
+  }
+}
+
+function checkEmpty(all) {
+  const empty = document.getElementById('emptyState');
+  empty.classList.toggle('hidden', all.length > 0);
+}
+
+function renderStats(all) {
+  document.getElementById('s-total').textContent = all.length;
+  document.getElementById('s-rooms').textContent = new Set(all.map(i=>i.room)).size;
+  document.getElementById('s-tags').textContent = new Set(all.flatMap(i=>i.tags)).size;
+
+  const now = Date.now();
+  const alerts = all.filter(i => {
+    const expWarn = i.expireDate && (new Date(i.expireDate) - now) < 90*86400000;
+    const qtyWarn = i.minQty > 0 && i.qty <= i.minQty;
+    return expWarn || qtyWarn;
+  });
+  document.getElementById('s-alerts').textContent = alerts.length;
+}
+
+function renderCounts(all) {
+  document.getElementById('cnt-全部').textContent = all.length;
+  ['客厅','卧室','厨房','书房','洗手间','阳台','储物间'].forEach(r => {
+    const el = document.getElementById('cnt-'+r);
+    if (el) el.textContent = all.filter(i=>i.room===r).length;
+  });
+}
+
+// 过期置顶专区渲染
+function renderExpiredSection(all) {
+  const section = document.getElementById('expiredSection');
+  const list = document.getElementById('expiredList');
+  const countEl = document.getElementById('expiredCount');
+  const t = I18N[curLang];
+  const now = Date.now();
+
+  const expired = all.filter(i => {
+    if (!i.expireDate) return false;
+    return new Date(i.expireDate) - now < 90*86400000;
+  }).sort((a, b) => new Date(a.expireDate) - new Date(b.expireDate));
+
+  if (expired.length === 0) {
+    section.classList.add('hidden');
+    return;
+  }
+
+  section.classList.remove('hidden');
+  countEl.textContent = expired.length;
+
+  list.innerHTML = expired.slice(0, 5).map(item => {
+    const ti = getTypeIcon(item.tags);
+    const diff = new Date(item.expireDate) - now;
+    const days = Math.floor(diff / 86400000);
+    const isOverdue = diff < 0;
+    const badgeText = isOverdue ? t.expiredOverdue : `${days}${t.expiredSoon}`;
+    const badgeClass = isOverdue ? 'overdue' : 'warning';
+
+    return `
+      <div class="expired-item fade-in" onclick="openDetail('${item.id}')">
+        <div class="expired-item-icon" style="background:${ti.bg}">
+          <i data-lucide="${ti.icon}" width="18" height="18" color="${ti.color}"></i>
         </div>
-      `).join('');
-    }
-
-    function updateStats(items) {
-      document.getElementById('statTotal').textContent = items.length;
-
-      const rooms = new Set(items.map(i => i.room));
-      document.getElementById('statRooms').textContent = rooms.size;
-
-      const tags = new Set(items.flatMap(i => i.tags));
-      document.getElementById('statTags').textContent = tags.size;
-
-      const weekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
-      const recentCount = items.filter(i => new Date(i.createdAt) > weekAgo).length;
-      document.getElementById('statRecent').textContent = recentCount;
-    }
-
-    function updateRoomCounts(items) {
-      document.getElementById('count-all').textContent = items.length;
-
-      const rooms = ['客厅', '卧室', '厨房', '书房', '洗手间', '阳台', '车库/储物'];
-      rooms.forEach(room => {
-        const count = items.filter(i => i.room === room).length;
-        const el = document.getElementById(`count-${room}`);
-        if (el) el.textContent = count;
-      });
-    }
-
-    // ========================================
-    // 搜索功能
-    // ========================================
-    function handleSearch(query) {
-      const clearBtn = document.getElementById('searchClear');
-      clearBtn.classList.toggle('visible', query.length > 0);
-
-      clearTimeout(searchTimeout);
-      searchTimeout = setTimeout(() => {
-        if (query.trim()) {
-          performSearch(query.trim());
-        } else {
-          hideSearchResults();
-        }
-      }, 300);
-    }
-
-    function quickSearch(query) {
-      document.getElementById('mainSearch').value = query;
-      handleSearch(query);
-    }
-
-    function clearSearch() {
-      document.getElementById('mainSearch').value = '';
-      document.getElementById('searchClear').classList.remove('visible');
-      hideSearchResults();
-    }
-
-    function performSearch(query) {
-      const allItems = loadItems();
-      const results = allItems.filter(item => {
-        const searchText = `${item.name} ${item.description} ${item.room} ${item.container} ${item.tags.join(' ')}`.toLowerCase();
-        return searchText.includes(query.toLowerCase());
-      });
-
-      showSearchResults(results, query);
-    }
-
-    function showSearchResults(results, query) {
-      document.getElementById('searchResults').classList.add('active');
-      document.getElementById('mainContent').style.display = 'none';
-
-      const countEl = document.getElementById('searchCount');
-      countEl.innerHTML = `找到 <strong>${results.length}</strong> 个物品`;
-
-      const grid = document.getElementById('searchResultsGrid');
-      if (results.length === 0) {
-        grid.innerHTML = `
-          <div class="no-results" style="grid-column: 1/-1;">
-            <div class="no-results-icon">🔍</div>
-            <h3 class="no-results-title">没有找到「${query}」</h3>
-            <p class="no-results-text">试试其他关键词，或者添加这个物品到你的清单里</p>
-            <button class="btn btn-primary" onclick="openAddModalWithName('${query}')">
-              <span>➕</span>
-              <span>添加「${query}」</span>
-            </button>
-          </div>
-        `;
-      } else {
-        renderGrid('searchResultsGrid', results);
-      }
-    }
-
-    function hideSearchResults() {
-      document.getElementById('searchResults').classList.remove('active');
-      document.getElementById('mainContent').style.display = 'block';
-    }
-
-    // ========================================
-    // 房间筛选
-    // ========================================
-    function filterByRoom(room) {
-      currentRoom = room;
-
-      // 更新 UI
-      document.querySelectorAll('.room-item').forEach(el => {
-        el.classList.toggle('active', el.dataset.room === room);
-      });
-
-      renderItems();
-    }
-
-    // ========================================
-    // 模态框操作
-    // ========================================
-    function openAddModal() {
-      document.getElementById('addModal').classList.add('open');
-      document.body.style.overflow = 'hidden';
-      document.getElementById('itemName').focus();
-    }
-
-    function openAddModalWithName(name) {
-      openAddModal();
-      document.getElementById('itemName').value = name;
-    }
-
-    function closeAddModal() {
-      document.getElementById('addModal').classList.remove('open');
-      document.body.style.overflow = '';
-      resetAddForm();
-    }
-
-    function resetAddForm() {
-      document.getElementById('addForm').reset();
-      document.getElementById('photoUpload').classList.remove('has-photo');
-      document.getElementById('photoUpload').innerHTML = `
-        <div class="photo-upload-icon">📷</div>
-        <div class="photo-upload-text">点击上传照片</div>
-        <div class="photo-upload-hint">支持 JPG、PNG，建议正方形</div>
-      `;
-      currentPhoto = '';
-      selectedTags = [];
-      document.querySelectorAll('.tag-option').forEach(el => el.classList.remove('selected'));
-    }
-
-    function handlePhotoSelect(input) {
-      const file = input.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        currentPhoto = e.target.result;
-        const upload = document.getElementById('photoUpload');
-        upload.classList.add('has-photo');
-        upload.innerHTML = `<img src="${currentPhoto}" class="photo-preview" alt="预览">`;
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function toggleTag(el) {
-      el.classList.toggle('selected');
-      const tag = el.dataset.tag;
-      if (selectedTags.includes(tag)) {
-        selectedTags = selectedTags.filter(t => t !== tag);
-      } else {
-        selectedTags.push(tag);
-      }
-    }
-
-    function submitItem() {
-      const name = document.getElementById('itemName').value.trim();
-      const room = document.getElementById('itemRoom').value;
-      const container = document.getElementById('itemContainer').value.trim();
-      const description = document.getElementById('itemDescription').value.trim();
-
-      if (!name) {
-        showToast('请输入物品名称', 'error');
-        return;
-      }
-
-      if (!room) {
-        showToast('请选择放置房间', 'error');
-        return;
-      }
-
-      const newItem = {
-        id: Date.now().toString(),
-        name,
-        description,
-        photo: currentPhoto,
-        room,
-        container,
-        tags: [...selectedTags],
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      };
-
-      const items = loadItems();
-      items.unshift(newItem);
-      saveItems(items);
-
-      closeAddModal();
-      renderItems();
-      showToast(`「${name}」添加成功！`, 'success');
-    }
-
-    // ========================================
-    // 详情模态框
-    // ========================================
-    function openDetail(id) {
-      const items = loadItems();
-      const item = items.find(i => i.id === id);
-      if (!item) return;
-
-      const content = document.getElementById('detailContent');
-      content.innerHTML = `
-        ${item.photo ? `<img src="${item.photo}" class="detail-image" alt="${item.name}">` : ''}
-        <div style="padding: 24px;">
-          <h2 class="detail-name">${item.name}</h2>
-
-          <div class="detail-meta">
-            <div class="detail-meta-item">
-              <span class="icon">📍</span>
-              <span>${item.room}</span>
-              ${item.container ? ` › ${item.container}` : ''}
-            </div>
-            <div class="detail-meta-item">
-              <span class="icon">📅</span>
-              <span>${formatDate(item.createdAt)}</span>
-            </div>
-          </div>
-
-          ${item.description ? `<p class="detail-description">${item.description}</p>` : ''}
-
-          ${item.tags.length > 0 ? `
-            <div class="detail-tags">
-              ${item.tags.map(tag => `<span class="detail-tag">${tag}</span>`).join('')}
-            </div>
-          ` : ''}
-
-          <div class="detail-actions">
-            <button class="btn btn-secondary" onclick="closeDetailModal(); copyLocation('${item.room}', '${item.container}')">
-              <span>📋</span>
-              <span>复制位置</span>
-            </button>
-            <button class="btn btn-secondary" onclick="closeDetailModal(); openEditModal('${item.id}')">
-              <span>✏️</span>
-              <span>编辑</span>
-            </button>
-            <button class="btn btn-secondary" style="color: var(--color-error);" onclick="deleteItem('${item.id}')">
-              <span>🗑️</span>
-              <span>删除</span>
-            </button>
-          </div>
+        <div class="expired-item-info">
+          <div class="expired-item-name">${item.name}</div>
+          <div class="expired-item-meta"><i data-lucide="map-pin" width="10" height="10" style="display:inline"></i> ${item.room}${item.container?' › '+item.container:''}</div>
         </div>
-      `;
+        <span class="expired-item-badge ${badgeClass}">${badgeText}</span>
+      </div>`;
+  }).join('');
 
-      document.getElementById('detailModal').classList.add('open');
+  lucide.createIcons({ attrs: { width: 18, height: 18 } });
+}
+
+function checkAlerts(all) {
+  const banner = document.getElementById('alertBanner');
+  const list = document.getElementById('alertList');
+  const now = Date.now();
+  const alerts = [];
+
+  all.forEach(i => {
+    if (i.expireDate) {
+      const diff = new Date(i.expireDate) - now;
+      if (diff < 0) alerts.push(`「${i.name}」${curLang==='zh'?'已过期':'Expired'}（${i.expireDate}）`);
+      else if (diff < 30*86400000) alerts.push(`「${i.name}」${curLang==='zh'?'即将到期':'Expires'} ${i.expireDate}`);
     }
-
-    function closeDetailModal() {
-      document.getElementById('detailModal').classList.remove('open');
+    if (i.minQty > 0 && i.qty <= i.minQty) {
+      alerts.push(`「${i.name}」${curLang==='zh'?'库存不足':'Low stock'}（${i.qty}/${i.minQty}）`);
     }
+  });
 
-    function copyLocation(room, container) {
-      const text = container ? `${room} - ${container}` : room;
-      navigator.clipboard.writeText(text).then(() => {
-        showToast('位置已复制到剪贴板', 'success');
-      });
+  if (alerts.length > 0) {
+    banner.classList.remove('hidden');
+    list.innerHTML = alerts.slice(0,5).map(a=>`<li>${a}</li>`).join('');
+  } else {
+    banner.classList.add('hidden');
+  }
+}
+
+function renderGrid(id, arr) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (!arr.length) {
+    el.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text3);font-size:14px">${curLang==='zh'?'暂无物品':'No items'}</p>`;
+    return;
+  }
+  el.innerHTML = arr.map(item => itemCard(item)).join('');
+  lucide.createIcons({ attrs: { width: 14, height: 14 } });
+}
+
+function itemCard(item) {
+  const ti = getTypeIcon(item.tags);
+  const now = Date.now();
+  const t = I18N[curLang];
+
+  let expireBar = '', alertBadge = '';
+  if (item.expireDate) {
+    const diff = new Date(item.expireDate) - now;
+    const days = Math.floor(diff / 86400000);
+    if (diff < 0) {
+      expireBar = `<div class="item-expire-bar danger"><i data-lucide="alert-circle" width="11" height="11"></i>${t.expiredOverdue}</div>`;
+      alertBadge = `<span class="item-alert danger"><i data-lucide="x" width="10" height="10"></i></span>`;
+    } else if (days < 30) {
+      expireBar = `<div class="item-expire-bar warn"><i data-lucide="clock" width="11" height="11"></i>${days}${t.expiredSoon}</div>`;
+      alertBadge = `<span class="item-alert warn"><i data-lucide="clock" width="10" height="10"></i></span>`;
     }
+  }
 
-    function deleteItem(id) {
-      const items = loadItems();
-      const item = items.find(i => i.id === id);
-      if (!item) return;
+  let qtyBadge = '';
+  if (item.qty > 1 || item.minQty > 0) {
+    const low = item.minQty > 0 && item.qty <= item.minQty;
+    const qtyIcon = low ? 'alert-triangle' : 'package';
+    const qtyText = low ? `${t.lowStock} ${item.qty}${t.qtyUnit}` : `${item.qty} ${t.qtyUnit}`;
+    qtyBadge = `<span class="item-qty${low?' low':''}"><i data-lucide="${qtyIcon}" width="10" height="10"></i>${qtyText}</span>`;
+  }
 
-      if (confirm(`确定要删除「${item.name}」吗？`)) {
-        const newItems = items.filter(i => i.id !== id);
-        saveItems(newItems);
-        closeDetailModal();
-        renderItems();
-        showToast(`「${item.name}」已删除`, 'success');
-      }
+  const thumb = item.photo
+    ? `<img src="${item.photo}" alt="${item.name}">`
+    : `<div class="item-type-icon" style="background:${ti.bg};color:${ti.color}"><i data-lucide="${ti.icon}" width="26" height="26"></i></div>`;
+
+  const tagBadges = item.tags.slice(0,2).map(tag=>`<span class="item-badge">${tag}</span>`).join('');
+
+  return `
+    <div class="item-card fade-in" onclick="openDetail('${item.id}')">
+      <div class="item-thumb">
+        ${thumb}
+        <div class="item-badge-row">${tagBadges}</div>
+        ${alertBadge}
+      </div>
+      <div class="item-info">
+        <div class="item-name">${item.name}</div>
+        <div class="item-loc">
+          <i data-lucide="map-pin" width="11" height="11"></i>
+          <span class="room">${item.room}</span>
+          ${item.container ? ` <span>›</span> <span>${item.container}</span>` : ''}
+        </div>
+        ${qtyBadge}
+      </div>
+      ${expireBar}
+    </div>`;
+}
+
+function updateRoomTitle() {
+  const title = document.getElementById('roomSectionTitle');
+  const iconMap = {
+    '全部': 'layout-grid', '客厅':'sofa', '卧室':'bed-double',
+    '厨房':'utensils', '书房':'book-open', '洗手间':'shower-head',
+    '阳台':'trees', '储物间':'archive'
+  };
+  const ic = iconMap[curRoom] || 'layout-grid';
+  const label = curRoom === '全部' ? (curLang==='zh'?'全部物品':'All Items') : curRoom;
+  title.innerHTML = `<span class="section-title-icon"><i data-lucide="${ic}" width="14" height="14"></i></span>${label}`;
+}
+
+// ===================================================
+// SEARCH
+// ===================================================
+function handleSearch(q) {
+  document.getElementById('heroSearch').value = q;
+  document.getElementById('topSearch').value = q;
+  document.getElementById('heroClear').classList.toggle('show', q.length > 0);
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => {
+    if (q.trim()) doSearch(q.trim());
+    else hideSearch();
+  }, 280);
+}
+
+function qs(q) {
+  document.getElementById('heroSearch').value = q;
+  handleSearch(q);
+}
+
+function clearSearch() {
+  document.getElementById('heroSearch').value = '';
+  document.getElementById('topSearch').value = '';
+  document.getElementById('heroClear').classList.remove('show');
+  hideSearch();
+}
+
+function doSearch(q) {
+  const lq = q.toLowerCase();
+  const results = load().filter(i =>
+    [i.name, i.desc, i.room, i.container, ...i.tags]
+      .join(' ').toLowerCase().includes(lq)
+  );
+  const t = I18N[curLang];
+
+  document.getElementById('searchPanel').classList.add('active');
+  document.getElementById('mainView').style.display = 'none';
+  document.getElementById('searchCount').innerHTML = `${t.findCount} <strong>${results.length}</strong> ${t.items}`;
+
+  const grid = document.getElementById('searchGrid');
+  if (!results.length) {
+    grid.innerHTML = `
+      <div class="no-result">
+        <div class="no-result-icon"><i data-lucide="search-x" width="34" height="34"></i></div>
+        <h3>${t.noResultTitle}「${q}」</h3>
+        <p>${t.noResultDesc}</p>
+        <button class="btn btn-primary" onclick="openAddWithName('${q}')">
+          <i data-lucide="plus" width="15" height="15"></i> ${t.addThis}「${q}」
+        </button>
+      </div>`;
+    lucide.createIcons({ attrs:{width:34,height:34} });
+  } else {
+    renderGrid('searchGrid', results);
+  }
+}
+
+function hideSearch() {
+  document.getElementById('searchPanel').classList.remove('active');
+  document.getElementById('mainView').style.display = '';
+}
+
+// ===================================================
+// ROOM FILTER
+// ===================================================
+function filterRoom(room) {
+  curRoom = room;
+  document.querySelectorAll('#roomList .sb-item').forEach(el => {
+    el.classList.toggle('active', el.dataset.room === room);
+  });
+  render();
+}
+
+// ===================================================
+// ADD ITEM
+// ===================================================
+function openAddModal() {
+  document.getElementById('addOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  applyI18N(curLang);
+  setTimeout(() => document.getElementById('f-name').focus(), 100);
+}
+
+function openAddWithName(name) {
+  openAddModal();
+  document.getElementById('f-name').value = name;
+}
+
+function closeAdd() {
+  document.getElementById('addOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+  resetForm();
+}
+
+function resetForm() {
+  ['f-name','f-container','f-desc','f-expire'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('f-qty').value = 1;
+  document.getElementById('f-minqty').value = 0;
+  document.querySelectorAll('#roomPicker .room-chip').forEach(el => el.classList.remove('on'));
+  document.querySelectorAll('#tagPicker .tag-chip').forEach(el => el.classList.remove('on'));
+  selTags = [];
+  selRoom = '';
+  curPhoto = '';
+  const pz = document.getElementById('pzone');
+  pz.classList.remove('filled');
+  pz.innerHTML = `
+    <div class="photo-zone-icon"><i data-lucide="camera" width="22" height="22"></i></div>
+    <div class="photo-zone-text" id="photoZoneText">${I18N[curLang].photoZoneText}</div>
+    <div class="photo-zone-hint">JPG / PNG</div>`;
+  lucide.createIcons();
+}
+
+function onPhoto(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    curPhoto = e.target.result;
+    const pz = document.getElementById('pzone');
+    pz.classList.add('filled');
+    pz.innerHTML = `<img src="${curPhoto}" class="photo-preview" alt="preview">`;
+  };
+  reader.readAsDataURL(file);
+}
+
+function pickRoom(el) {
+  document.querySelectorAll('#roomPicker .room-chip').forEach(c => c.classList.remove('on'));
+  el.classList.add('on');
+  selRoom = el.dataset.room;
+  lucide.createIcons({ attrs:{width:14,height:14} });
+}
+
+function toggleTag(el) {
+  el.classList.toggle('on');
+  const tag = el.dataset.tag;
+  selTags = el.classList.contains('on')
+    ? [...selTags, tag]
+    : selTags.filter(t => t !== tag);
+}
+
+function changeQty(d) {
+  const el = document.getElementById('f-qty');
+  el.value = Math.max(1, parseInt(el.value||1) + d);
+}
+
+function submitItem() {
+  const t = I18N[curLang];
+  const name = document.getElementById('f-name').value.trim();
+  if (!name) return toast(t.noName,'err');
+  if (!selRoom) return toast(t.noRoom,'err');
+
+  const item = {
+    id: Date.now().toString(),
+    name,
+    desc: document.getElementById('f-desc').value.trim(),
+    photo: curPhoto,
+    room: selRoom,
+    container: document.getElementById('f-container').value.trim(),
+    tags: [...selTags],
+    qty: parseInt(document.getElementById('f-qty').value) || 1,
+    minQty: parseInt(document.getElementById('f-minqty').value) || 0,
+    expireDate: document.getElementById('f-expire').value || '',
+    createdAt: new Date().toISOString(),
+  };
+
+  const all = load();
+  all.unshift(item);
+  save(all);
+  closeAdd();
+  render();
+  toast(`「${name}」${t.addedOk}`, 'ok');
+}
+
+// ===================================================
+// DETAIL
+// ===================================================
+function openDetail(id) {
+  const item = load().find(i => i.id === id);
+  if (!item) return;
+  const t = I18N[curLang];
+  const ti = getTypeIcon(item.tags);
+  const now = Date.now();
+
+  let expireRow = '';
+  if (item.expireDate) {
+    const diff = new Date(item.expireDate) - now;
+    const days = Math.floor(diff / 86400000);
+    if (diff < 0) {
+      expireRow = `<div class="detail-expire-row danger"><i data-lucide="alert-circle" width="15" height="15"></i>${t.expiredOverdue}（${item.expireDate}）</div>`;
+    } else if (days < 30) {
+      expireRow = `<div class="detail-expire-row warn"><i data-lucide="clock" width="15" height="15"></i>${days} ${t.expiredSoon}（${item.expireDate}）</div>`;
+    } else {
+      expireRow = `<div class="detail-expire-row ok"><i data-lucide="check-circle" width="15" height="15"></i>${t.ok} ${item.expireDate}（${days} ${t.daysLeft}）</div>`;
     }
+  }
 
-    // ========================================
-    // 其他功能
-    // ========================================
-    function showBulkImport() {
-      showToast('批量录入功能开发中，敬请期待！', 'success');
-    }
+  const imgArea = item.photo
+    ? `<img src="${item.photo}" class="detail-img" alt="${item.name}">`
+    : `<div class="detail-no-img" style="background:${ti.bg}"><i data-lucide="${ti.icon}" width="60" height="60" color="${ti.color}"></i></div>`;
 
-    function formatDate(dateStr) {
-      const date = new Date(dateStr);
-      const now = new Date();
-      const diff = now - date;
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  document.getElementById('detailBody').innerHTML = `
+    ${imgArea}
+    <div class="detail-body">
+      <div class="detail-name">${item.name}</div>
+      <div class="detail-metas">
+        <div class="detail-meta"><i data-lucide="map-pin" width="13" height="13"></i>${item.room}${item.container?' › '+item.container:''}</div>
+        <div class="detail-meta"><i data-lucide="package" width="13" height="13"></i>${item.qty} ${t.qtyUnit}</div>
+        <div class="detail-meta"><i data-lucide="calendar" width="13" height="13"></i>${fmtDate(item.createdAt)}</div>
+      </div>
+      ${item.desc ? `<p class="detail-desc">${item.desc}</p>` : ''}
+      ${item.tags.length ? `<div class="detail-tags">${item.tags.map(tag=>`<span class="detail-tag">${tag}</span>`).join('')}</div>` : ''}
+      ${expireRow}
+      <div class="detail-actions">
+        <button class="btn btn-secondary" onclick="cpyLoc('${item.room}','${item.container||''}')">
+          <i data-lucide="copy" width="14" height="14"></i>${t.detailCopy}
+        </button>
+        <button class="btn btn-danger" onclick="delItem('${item.id}')">
+          <i data-lucide="trash-2" width="14" height="14"></i>${t.detailDelete}
+        </button>
+      </div>
+    </div>`;
 
-      if (days === 0) return '今天';
-      if (days === 1) return '昨天';
-      if (days < 7) return `${days}天前`;
-      if (days < 30) return `${Math.floor(days / 7)}周前`;
+  document.getElementById('detailOverlay').classList.add('open');
+  lucide.createIcons({ attrs:{width:13,height:13} });
+}
 
-      return date.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' });
-    }
+function closeDetail() {
+  document.getElementById('detailOverlay').classList.remove('open');
+}
 
-    function showToast(message, type = '') {
-      const toast = document.getElementById('toast');
-      toast.textContent = message;
-      toast.className = `toast ${type} show`;
+function cpyLoc(room, container) {
+  const t = I18N[curLang];
+  const txt = container ? `${room} › ${container}` : room;
+  navigator.clipboard.writeText(txt).then(() => toast(t.copiedLoc,'ok'));
+}
 
-      setTimeout(() => {
-        toast.classList.remove('show');
-      }, 2500);
-    }
+function delItem(id) {
+  const t = I18N[curLang];
+  const all = load();
+  const item = all.find(i => i.id === id);
+  if (!item) return;
+  if (!confirm(curLang==='zh' ? `确定删除「${item.name}」？` : `Delete "${item.name}"?`)) return;
+  save(all.filter(i => i.id !== id));
+  closeDetail();
+  render();
+  toast(`「${item.name}」${t.deletedOk}`, 'ok');
+}
 
-    // ========================================
-    // 初始化
-    // ========================================
+// ===================================================
+// THEME
+// ===================================================
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  localStorage.setItem('theme', isDark ? 'light' : 'dark');
+  const btn = document.getElementById('themeBtn');
+  btn.innerHTML = isDark
+    ? '<i data-lucide="moon" width="17" height="17"></i>'
+    : '<i data-lucide="sun" width="17" height="17"></i>';
+  lucide.createIcons({ attrs:{width:17,height:17} });
+}
+
+(function() {
+  const t = localStorage.getItem('theme') || 'light';
+  document.documentElement.setAttribute('data-theme', t);
+  if (t === 'dark') {
     document.addEventListener('DOMContentLoaded', () => {
-      renderItems();
-
-      // ESC 关闭模态框
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-          closeAddModal();
-          closeDetailModal();
-        }
-      });
-    });
-
-    // 键盘快捷键
-    document.addEventListener('keydown', (e) => {
-      // Ctrl/Cmd + K 聚焦搜索
-      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-        e.preventDefault();
-        document.getElementById('mainSearch').focus();
+      const btn = document.getElementById('themeBtn');
+      if (btn) {
+        btn.innerHTML = '<i data-lucide="sun" width="17" height="17"></i>';
+        lucide.createIcons({ attrs:{width:17,height:17} });
       }
     });
-  </script>
+  }
+})();
+
+// ===================================================
+// BOTTOM NAV
+// ===================================================
+function bnSwitch(tab) {
+  document.querySelectorAll('.bn-item').forEach(el => el.classList.toggle('active', el.dataset.bn===tab));
+  if (tab === 'search') document.getElementById('heroSearch').focus();
+}
+
+// ===================================================
+// EXPORT
+// ===================================================
+function exportData() {
+  const data = load();
+  const json = JSON.stringify(data, null, 2);
+  const blob = new Blob([json], { type:'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const name = curLang === 'zh' ? 'whatishome' : 'home-inventory';
+  a.href = url; a.download = `${name}_${new Date().toLocaleDateString().replace(/\//g,'-')}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast(I18N[curLang].exportData + ' ✓', 'ok');
+}
+
+// ===================================================
+// UTILS
+// ===================================================
+function fmtDate(str) {
+  const d = new Date(str), now = new Date();
+  const days = Math.floor((now - d) / 86400000);
+  if (days === 0) return curLang==='zh'?'今天':'Today';
+  if (days === 1) return curLang==='zh'?'昨天':'Yesterday';
+  if (days < 7)  return curLang==='zh'?`${days}天前`:`${days}d ago`;
+  if (days < 30) return curLang==='zh'?`${Math.floor(days/7)}周前`:`${Math.floor(days/7)}w ago`;
+  return d.toLocaleDateString(curLang==='zh'?'zh-CN':'en-US', {month:'short', day:'numeric'});
+}
+
+function toast(msg, type='') {
+  const el = document.getElementById('toast');
+  const icon = type==='ok' ? 'check-circle' : type==='err' ? 'x-circle' : '';
+  el.innerHTML = `${icon ? `<i data-lucide="${icon}" width="14" height="14"></i>` : ''}${msg}`;
+  el.className = `toast show ${type}`;
+  lucide.createIcons({ attrs:{width:14,height:14} });
+  setTimeout(() => el.classList.remove('show'), 2800);
+}
+
+// ===================================================
+// INIT
+// ===================================================
+document.addEventListener('DOMContentLoaded', () => {
+  applyI18N(curLang);
+  lucide.createIcons();
+  render();
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeAdd(); closeDetail(); }
+    if ((e.ctrlKey||e.metaKey) && e.key==='k') {
+      e.preventDefault();
+      document.getElementById('heroSearch').focus();
+    }
+  });
+
+  function checkBottomNav() {
+    const bn = document.getElementById('bottomNav');
+    bn.style.display = window.innerWidth <= 640 ? 'flex' : 'none';
+  }
+  checkBottomNav();
+  window.addEventListener('resize', checkBottomNav);
+
+  // close overlay on outside click
+  document.getElementById('addOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closeAdd();
+  });
+  document.getElementById('detailOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closeDetail();
+  });
+});
+</script>
 </body>
 </html>
